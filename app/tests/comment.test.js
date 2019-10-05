@@ -2,6 +2,7 @@ const supertest = require('supertest')
 const app = require('../app')
 const request = supertest(app)
 const mongoose = require('../models/db')
+const { initializeDB } = require('../utlis/setup')
 const payload = [
   {
     time: '116',
@@ -28,11 +29,21 @@ const payload = [
     parentId: 1
   }
 ]
+let token = '';
 
-beforeAll(done => {
-  for (var i in mongoose.connection.collections) {
-    mongoose.connection.collections[i].remove(function() {});
+beforeAll( async done => {
+  initializeDB(mongoose);
+  const userData = {
+    email: 'geakii@gmail.com',
+    password: '123'
   }
+  await request.post('/api/users')
+    .send(userData)
+    .set('Content-Type', 'application/json')
+  const res = await request.post('/api/login')
+    .send(userData)
+    .set('Content-Type', 'application/json')
+  token = res.body.token;
   done();
 });
 
@@ -42,6 +53,7 @@ describe('POST /comments', ()=>{
       return request.post('/api/comments')
         .send(item)
         .set('Content-Type', 'application/json')
+        .set('authorization', token)
     }))
     expect(res[2].status).toBe(200);
     expect(res[2].body.message).toBe('success');
@@ -79,7 +91,8 @@ describe('PATCH /comments/:id', ()=>{
     }
     const res = await request.patch('/api/comments/1')
       .send(updatePayload)
-      .set('Content-Type', 'application/json');
+      .set('Content-Type', 'application/json')
+      .set('authorization', token);
     
     expect(res.status).toBe(200);
     expect(res.body.message).toBe('success');
@@ -90,6 +103,7 @@ describe('PATCH /comments/:id', ()=>{
 describe('DELETE /comments/:id', ()=>{
   it('update specific comment', async done => {
     const res = await request.delete('/api/comments/1')
+      .set('authorization', token)
     
     expect(res.status).toBe(200);
     expect(res.body.message).toBe('success');

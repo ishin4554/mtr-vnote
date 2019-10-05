@@ -12,6 +12,9 @@ const STATE = {
     NOLOGIN_ERR: {
       message: 'ProblemNoEmail',
     },
+    AUTH_ERR: {
+      message: 'ProblemToken',
+    }
   },
 };
 module.exports = STATE;

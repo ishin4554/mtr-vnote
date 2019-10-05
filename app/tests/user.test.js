@@ -3,6 +3,9 @@ const app = require('../app')
 const request = supertest(app)
 const mongoose = require('../models/db')
 const STATE = require('../constants/state')
+const { checkAuth } = require('../middlewares/auth')
+const { initializeDB } = require('../utlis/setup')
+
 const payload = {
     nickname: 'geakii',
     email: 'geakii@gmail.com',
@@ -11,9 +14,7 @@ const payload = {
 
 
 beforeAll(done => {
-  for (var i in mongoose.connection.collections) {
-    mongoose.connection.collections[i].remove(function() {});
-  }
+  initializeDB(mongoose)
   done();
 });
 
@@ -40,6 +41,7 @@ describe('POST /users', ()=>{
 });
 
 describe('POST /login', ()=>{
+  let token;
   it('should login', async done => {
     const res = await request.post('/api/login')
         .send(({
@@ -50,6 +52,7 @@ describe('POST /login', ()=>{
 
     expect(res.status).toBe(200);
     expect(res.body.token).toBeDefined();
+    token = res.body.token;
     done();
   });
 
@@ -76,6 +79,17 @@ describe('POST /login', ()=>{
 
     expect(res.status).toBe(403);
     expect(res.body.message).toBe(STATE.FAIL.NOLOGIN_ERR.message);
+    done();
+  });
+
+  it('should check auth middlewares work', async done => {
+    const req = { headers: { authorization: token }};
+    const next = jest.fn();
+    const res = {};
+
+    await checkAuth(req, res, next)
+
+    expect(next).toHaveBeenCalled();
     done();
   });
 });

@@ -2,6 +2,8 @@ const supertest = require('supertest')
 const app = require('../app')
 const request = supertest(app)
 const mongoose = require('../models/db')
+const { initializeDB } = require('../utlis/setup')
+
 const payload = [
   {
     url: 'https://www.youtube.com/watch?v=0kZ3ix3j5Ik',
@@ -28,11 +30,21 @@ const payload = [
     userId: 2
   },
 ]
+let token = '';
 
-beforeAll(done => {
-  for (var i in mongoose.connection.collections) {
-    mongoose.connection.collections[i].remove(function() {});
+beforeAll(async done => {
+  initializeDB(mongoose);
+  const userData = {
+    email: 'geakii@gmail.com',
+    password: '123'
   }
+  await request.post('/api/users')
+    .send(userData)
+    .set('Content-Type', 'application/json')
+  const res = await request.post('/api/login')
+    .send(userData)
+    .set('Content-Type', 'application/json')
+  token = res.body.token;
   done();
 });
 
@@ -42,6 +54,7 @@ describe('POST /course', ()=>{
       return request.post('/api/courses')
         .send(item)
         .set('Content-Type', 'application/json')
+        .set('authorization', token)
     }))
     expect(res[2].status).toBe(200);
     expect(res[2].body.message).toBe('success');
