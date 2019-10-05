@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "cd app && node app.js",
+    "start": "NODE_ENV=developement cd app && node server.js",
     "test": "NODE_ENV=test jest --watch"
   },
   "eslintConfig": {
@@ -26,9 +26,6 @@
     "testEnvironment": "node",
     "coveragePathIgnorePatterns": [
       "/node_modules/"
-    ],
-    "setupFiles": [
-      "dotenv/config"
     ]
   },
   "description": "",
