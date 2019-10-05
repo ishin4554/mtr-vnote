@@ -4,13 +4,13 @@ const STATE = {
   },
   FAIL: {
     PASSWORD_ERR: {
-      message: 'wrong password',
+      message: 'ProblemPassword',
     },
-    USERNAME_ERR: {
-      message: 'no user',
+    EMAIL_ERR: {
+      message: 'ProblemEmail',
     },
     NOLOGIN_ERR: {
-      message: 'not login',
+      message: 'ProblemNoEmail',
     },
   },
 };
