@@ -1,4 +1,4 @@
-import { Link, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
 import './header.sass';
 
@@ -8,8 +8,11 @@ class Header extends Component {
       <nav className='navigation'>
         <ul>
           <li>Dashboard</li>
-          <Link to='/login'>Login</Link>
-          <Link to='/register'>Register</Link>
+
+          <div className='navigation__member'>
+            <Link className='link' to='/login'>Login</Link>
+            <Link className='link' to='/register'>Register</Link>
+          </div>
         </ul>
       </nav>
     );

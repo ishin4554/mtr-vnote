@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { withRouter } from 'react-router-dom'; 
-// import storage from '../../utlis/storage';
+import { Link } from 'react-router-dom';
+
 import './sign.sass';
 class Sign extends Component{
   constructor(props) {
@@ -17,6 +18,11 @@ class Sign extends Component{
     })
   }
 
+  handlePreviousPage = () => {
+    const { history } = this.props;
+    history.goBack();
+  }
+
   handleLoginForm = (evt) => {
     evt.preventDefault()
     const { match, history, login, createUser } = this.props;
@@ -30,8 +36,7 @@ class Sign extends Component{
     } else {
       createUser(payload);
     }
-    console.log(payload)
-    // history.push('/work')
+    history.push('/')
   }
 
   render() {
@@ -39,7 +44,7 @@ class Sign extends Component{
     const route = this.props.match.path
     return(
       <div className='sign'>
-        <div className='sign___previous'>上一頁</div>
+        <div className='sign___previous' onClick={this.handlePreviousPage}>上一頁</div>
         <h1 className='sign__title'>{route === '/login' ? 'Login' : 'Register'}</h1>
         <form onSubmit={this.handleLoginForm}>
           <div className='sign__username'>
@@ -53,10 +58,10 @@ class Sign extends Component{
           <button className='sign__btn' type='submit'>{route === '/login' ? '登入' : '註冊'}</button>
           <div className='sign__info'>
             {route === '/login' && 
-            <div className='sign__forget'>忘記密碼？</div> }
+            <div className='sign__forget'>忘記密碼？（尚未開放）</div> }
             {route === '/login' && 
-            <div className='sign__forget'>沒有帳號？</div> }
-            {route === '/register' && <div className='sign__forget'>已有帳號？</div> }
+            <Link to='/register' className='link'>沒有帳號？</Link> }
+            {route === '/register' && <Link className='link' to='/login'>已有帳號？</Link> }
           </div>
         </form>
 
