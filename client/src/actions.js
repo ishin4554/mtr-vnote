@@ -22,6 +22,19 @@ const { Actions, Constants } = EasyActions({
     return { type, error };
   },
 
+  GET_COURSES_LIST(type, id) {
+    return { type, id };
+  },
+
+  GET_COURSES_LIST_RESULT(type, courses) {
+    return { type, courses };
+  },
+
+  GET_COURSES_LIST_FAILED(type, error) {
+    return { type, error };
+  },
+
+
   // comment 
   CREATE_COMMENT(type, comment) {
     return { type, comment };

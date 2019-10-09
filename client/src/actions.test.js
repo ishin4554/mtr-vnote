@@ -59,6 +59,58 @@ describe('course actions', () => {
     } 
     expect(Actions.GET_COURSE_FAILED(error)).toEqual(expectedAction)
   })
+
+  it('GET_COURSES_LIST', () => {
+    const id = 1;
+    const expectedAction = {
+      type: ActionTypes.GET_COURSES_LIST,
+      id
+    }
+    expect(Actions.GET_COURSES_LIST(id)).toEqual(expectedAction)
+  })
+
+  it('GET_COURSES_LIST_RESULT', () => {
+    const courses = [
+      {
+        url: 'https://www.youtube.com/watch?v=0kZ3ix3j5Ik',
+        title: 'test111',
+        description: '人在山的跟朋，時候回到就先走得，墨子空虛故事頭的。篇原我們有沒。',
+        folderId: 1,
+        updatedAt: Date.now,
+        userId: 1
+      },
+      {
+        url: 'https://www.youtube.com/watch?v=njlABvVRB68',
+        title: 'test222',
+        description: '真的我不，接著山的兩個問問像也系統，停止我忘腦袋的玩的一，部',
+        folderId: 1,
+        updatedAt: Date.now,
+        userId: 1
+      },
+      {
+        url: 'https://www.youtube.com/watch?v=-P1kAZxbD80',
+        title: 'test333',
+        description: '的，圖片牙齒掉了是開狀況的名。可以忘卻社團才會有些兩眼時常，出了好像沒用在家奶奶要一，發噗認真拿到臉色可以，更新靈',
+        folderId: 2,
+        updatedAt: Date.now,
+        userId: 2
+      },
+    ]
+    const expectedAction = {
+      type: ActionTypes.GET_COURSES_LIST_RESULT,
+      courses,
+    } 
+    expect(Actions.GET_COURSES_LIST_RESULT(courses)).toEqual(expectedAction)
+  })
+
+  it('GET_COURSES_LIST_FAILED', () => {
+    const error = 'gggggggg';
+    const expectedAction = {
+      type: ActionTypes.GET_COURSE_FAILED,
+      error: 'gggggggg'
+    } 
+    expect(Actions.GET_COURSE_FAILED(error)).toEqual(expectedAction)
+  })
 })
 
 
@@ -184,4 +236,5 @@ describe('comment actions', () => {
     } 
     expect(Actions.CREATE_USER_RESULT(error)).toEqual(expectedAction)
   })
+  
 })

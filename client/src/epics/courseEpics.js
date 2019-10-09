@@ -26,3 +26,14 @@ export const getCourse = action$ =>
     )
   )
 
+export const getCoursesList = action$ =>
+  action$.pipe(
+    ofType(ActionTypes.GET_COURSES_LIST),
+    switchMap(action => 
+      from(api.getCourses(action.id)).pipe(
+        map(res => Actions.GET_COURSES_LIST_RESULT(res.data)),
+        catchError(error => Actions.GET_COURSES_LIST_FAILED(error))
+      )
+    )
+  )
+

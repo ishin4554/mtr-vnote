@@ -2,12 +2,15 @@ import { ActionTypes } from "../actions";
 
 const defaultState = {
   course: {},
+  courses: [],
   isLoadingCreateCourse: false,
   isLoadingGetCourse: false,
   isLoadingUpdateCourse: false,
   isLoadingDeleteCourse: false,
+  isLoadingGetCoursesList: false,
   createCourseError: null,
   getCourseError: null,
+  getCoursesListError: null,
 };
 
 function courseReducers(state = defaultState, action) {
@@ -42,6 +45,25 @@ function courseReducers(state = defaultState, action) {
       return {
         ...state,
         getCourseError: action.error,
+      }
+
+    case ActionTypes.GET_COURSES_LIST:
+      return {
+        ...state,
+        isLoadingGetCoursesList: true
+      }
+
+    case ActionTypes.GET_COURSES_LIST_RESULT:
+      return {
+        ...state,
+        isLoadingGetCoursesList: false,
+        courses: action.courses,
+      }
+
+    case ActionTypes.GET_COURSES_LIST_FAILED:
+      return {
+        ...state,
+        getCoursesError: action.error,
       }
   
     default: 
