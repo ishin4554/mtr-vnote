@@ -58,5 +58,4 @@ describe('reducer', () => {
       loadingCreateUserError: error
     });
   })
-
 });

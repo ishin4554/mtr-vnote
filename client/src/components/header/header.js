@@ -8,8 +8,10 @@ class Header extends Component {
       <nav className='navigation'>
         <ul>
           <Link to='/dashboard'>Dashboard</Link>
-          <Link to='/login'>Login</Link>
-          <Link to='/register'>Register</Link>
+          <div className='navigation__member'>
+            <Link className='link' to='/login'>Login</Link>
+            <Link className='link' to='/register'>Register</Link>
+          </div>
         </ul>
       </nav>
     );
