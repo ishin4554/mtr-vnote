@@ -1,0 +1,41 @@
+@import '../../style.sass'
+
+.editor 
+  width: 80%
+  margin: 0 auto
+  margin-top: 20px
+  form
+    textarea
+      +size(100%, 80px)
+      border-radius: 5px
+      border: none
+      padding: 10px
+      outline: 0
+      resize: none
+      background: $surface-color
+      caret-color: $text-color
+      &:focus
+        filter: brightness(150%)
+  .editor__nav
+    display: flex
+    margin-top: 10px
+    &>*
+      margin: 0 10px 0 0
+      border-radius: 5px
+      &:hover 
+        filter: brightness(110%)
+    .editor__time
+      background: $surface-color
+      font-weight: 500
+      color: $primary-color
+      text-align: center
+      +size(50px, auto)
+    button
+      background: $primary-color
+      color: $text-color
+      border: none
+      
+  select
+    background: $surface-color
+    outline: none
+    color: $text-color

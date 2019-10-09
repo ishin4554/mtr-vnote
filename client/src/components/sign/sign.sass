@@ -1,0 +1,29 @@
+@import '../../style.sass'
+.sign
+  position: absolute
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+  justify-content: center
+  padding: 100px
+  +size(50%, 100%)
+  background: $primary-color
+  &>*
+    color: $background-color
+  .sign___previous
+    position: absolute
+    top: 20px
+    left: 20px
+  form
+    &>*
+      margin: 10px 0
+    input 
+      outline: none
+      border: none
+      background: transparent
+      border-bottom: 2px solid $background-color
+    button
+      outline: none
+      border: none
+      background: $background-color
+      color: $primary-color
