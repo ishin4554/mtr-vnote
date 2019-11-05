@@ -46,6 +46,7 @@ function userReducers(state = defaultState, action) {
           isLogin: true,
         }
       } else {
+        alert('還未登入')
         return {
           ...state,
           user: null,
@@ -89,6 +90,7 @@ function userReducers(state = defaultState, action) {
       }
 
     case ActionTypes.LOGIN_FAILED:
+      alert(action.error)
       return {
         ...state,
         isLoadingLogin: false,

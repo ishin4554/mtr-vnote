@@ -5,6 +5,8 @@
   background: $primary-color
   color: $text-color
   border-radius: 5px
+  &:hover 
+    background: $primary-varient-color
 .home
   position: absolute
   display: inline-block
@@ -28,7 +30,7 @@
         color: $text-color
   .feature
     +size(100%, auto)
-    padding: 50px 0
+    padding-top: 50px
     background: $primary-color
     display: flex
     flex-direction: column
@@ -48,10 +50,11 @@
       color: $text-color
       padding-bottom: 40px
       &>div
-        +size(20%, auto)
+        +size(200px, auto)
         display: flex
         flex-direction: column
         align-items: center
+        margin-bottom: 50px
       .container
         +size(auto, 70%)
         object-fit: cover

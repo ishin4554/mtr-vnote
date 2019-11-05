@@ -65,7 +65,7 @@ class CourseItem extends Component {
     const ytId = courseItem.url.split('v=')[1];
     const showTime = time.handleTransCreateTime(courseItem.updatedAt);
     return (
-      <div className='courseItem'>
+      <div className='course__item'>
         <div className='courseItem__container'>
           <div className={courseItem.isFinish ? 'tag isFinish': 'tag'}>
             {courseItem.isFinish ? '完成':'未完成'}

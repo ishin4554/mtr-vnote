@@ -8,6 +8,7 @@ const mapStateToProps = store => ({
   user: store.user.user,
   course: store.course.course,
   player: store.course.player,
+  isLogin: store.user.isLogin,
   isLoadingCreateCourse: store.course.isLoadingCreateCourse,
   isLoadingGetCourse: store.course.isLoadingGetCourse,
   getCourseError: store.course.getCourseError,

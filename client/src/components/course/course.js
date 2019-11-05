@@ -37,21 +37,28 @@ class Course extends Component {
   }
 
   componentDidMount() {
-    this.getCourse();
-    this.props.setUser();
+    const {isLogin, setUser} = this.props;
+    if(isLogin) {
+      this.getCourse();
+    } else {
+      setUser();
+    }
   }
 
   componentDidUpdate(prevProps) {
-    const { match } = this.props;
+    const { match, isLogin } = this.props;
     if(match.params.id !== prevProps.match.params.id) {
       this.setState({
         id: match.params.id
       })
     }
+    if(isLogin !== prevProps.isLogin && isLogin) {
+      this.getCourse();
+    }
   }
 
   render() {
-    const { match, course, isLoadingGetCourse, user } = this.props;
+    const { match, course, isLoadingGetCourse, user, isLogin } = this.props;
     const { currentReply, isLoadingVideo } = this.state;
     const id = match.params.id;
     return(
@@ -59,11 +66,11 @@ class Course extends Component {
         {isLoadingGetCourse && isLoadingVideo && <Loading />}
         <Header />
         <div className='course' ref={this.courseRef}>
-          {course &&
-            <Video url={course.url} handleLoading={this.handleLoading}/>}
-          {course &&
+          {course && isLogin &&
+            <Video isLogin={isLogin} url={course.url} handleLoading={this.handleLoading}/>}
+          {course && isLogin &&
             <Editor courseId={id} userId={user.userId} link={currentReply}/>}
-          {course &&
+          {course && isLogin &&
             <Comments courseId={id} url={course.url} title={course.title} handleReply={this.handleReply}/>}
         </div>
       </div>

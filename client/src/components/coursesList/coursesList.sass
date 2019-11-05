@@ -1,64 +1,91 @@
 @import '../../style.sass'
 
 .modal__video
-  position: fixed
   z-index: 5
-  width: 400px
-  height: 300px
-  left: 50%
-  top: 50%
-  transform: translate(-50%, -50%)
+  +size(400px, 300px)
+  +absCenter()
+  position: fixed
   background: $surface-color
+  box-shadow: 2px 2px 5px rgba($background-color, .9)
+  border-radius: 5px
   display: flex
   flex-direction: column
-  padding: 50px
-  &>*
-    color: $text-color
-    margin-top: 10px
+  padding: 40px
+  .modal__message
+    color: $secondary-color
+  .modal__nav
     display: flex
-  .modal__cancel
-    position: absolute
-    top: 10px
-    right: 10px
+    align-items: center
+    margin-top: 20px
+    .modal__cancel
+      color: rgba($text-color, .7)
+      cursor: pointer
+    &>*
+      margin-right: 10px
+  h1
+    font-size: $title
+    color: $text-color
+    margin: 0
+  p
+    color: $text-color
+    font-weight: 500
+    font-size: $small
+  input[type=text]
+    border-bottom: 1px solid $text-color
+    padding-bottom: 5px
+    caret-color: $text-color
+    cursor: pointer
+    color: $text-color
+    &::-webkit-input-placeholder
+      color: rgba($text-color, .5)
+    &:focus
+      border-bottom: 1px solid $primary-color
+  button
+    border-radius: 2px
+    background: $primary-color
+    color: $text-color
+    padding: 5px 20px
+    cursor: pointer
+    &:hover 
+      background: $primary-varient-color
 
 .dashboard__create
   position: relative
   left: 50%
   top: 50px
-  margin: 20px 0
   transform: translateX(-50%)
-  +size(80%, auto)
+  padding: 10px
+  +size(100%, auto)
   background: transparent
-  border-bottom: 5px solid $primary-color
+  border-bottom: 2px solid $primary-color
   i
     color: $primary-color
     font-size: 35px
+    cursor: pointer
   form
     display: flex
     align-items: center
   input
     font-size: 36px
-    border: none
     font-weight: 600
     color: $primary-color
-    background: transparent
     width: 100%
+    cursor: pointer
+    caret-color: $primary-color
     &::-webkit-input-placeholder
       color: rgba($primary-color, .5)
-    
-      
-.coursesBoard
+
+.courses__board
+  +size(100%, auto)
   display: flex
   flex-direction: column
-  width: 100%
   margin-top: 50px
   padding: 0 100px 50px 100px
   position: absolute
-  display: flex
-  flex-wrap: wrap
-  .coursesList
+  .courses__list
     width: 100%
     display: flex
+    flex-wrap: wrap
   &>div
     margin-top: 20px
   h3
@@ -71,15 +98,15 @@
   
 
 
-.courseItem
-  +size(240px, 180px)
+.course__item
+  +size(240px, 190px)
   margin: 20px
   position: relative
   background: $surface-color
   border-radius: 10px
   .tag
     position: absolute
-    font-size: $small
+    font-size: $paragraph
     top: 10px
     right: 10px 
     padding: 2px 4px
@@ -89,40 +116,40 @@
     &.isFinish
       background: $primary-color
       color: $text-color
-.courseItem__container
-  +size(100%, 75%)
-  overflow: hidden
-  
-.courseItem__img
-  +size(100%, 100%)
-  object-fit: cover
-  border-radius: 10px 10px 0 0
+  .courseItem__container
+    +size(100%, 70%)
+    overflow: hidden
+    
+  .courseItem__img
+    +size(100%, 100%)
+    object-fit: cover
+    border-radius: 10px 10px 0 0
+    cursor: pointer
 
 .courseItem__info
   display: flex
   align-items: center
-  padding: 8px 10px
+  padding: 10px
   justify-content: space-between
   &>*
     margin: 0
+  .courseItem__handle
+    visibility: hidden
   &:hover 
     .courseItem__handle
       visibility: visible
+  .courseItem__name
+    font-size: $paragraph
+    color: $text-color
+    text-decoration: none
+    font-weight: 500
+    letter-spacing: 2px
+    margin-bottom: 2px
+  .courseItem__user
+    font-weight: 300
+    color: rgba($text-color, .5)
+    font-size: $small
 
-.courseItem__name
-  font-size: 12px
-  color: $text-color
-  text-decoration: none
-  font-weight: 500
-  letter-spacing: 3px
-  margin-bottom: 2px
-.courseItem__user
-  font-weight: 300
-  color: rgba($text-color, .5)
-  font-size: 10px
-
-.courseItem__handle
-  visibility: hidden
 
 
 

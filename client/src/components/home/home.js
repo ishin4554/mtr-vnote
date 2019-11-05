@@ -30,7 +30,7 @@ class Home extends Component {
           <div className='landing__info'>
             <h1>VNote</h1>
             <h3>影片學習用的筆記服務</h3>
-            <div className='cta__btn'>馬上註冊</div>
+            <div className='cta__btn'><Link to='/register'>馬上註冊</Link></div>
           </div>
         </div>
         <div className='feature'>
@@ -64,7 +64,7 @@ class Home extends Component {
         <div className='cta'>
           <h3>立即開始免費使用</h3>
           <p>所有功能開放使用，持續開發新功能中！</p>
-          <div className='cta__btn'>馬上註冊</div>
+          <div className='cta__btn'><Link to='/register'>馬上註冊</Link></div>
         </div>
       </div>
     )

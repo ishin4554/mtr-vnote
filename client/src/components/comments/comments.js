@@ -152,6 +152,7 @@ class Comments extends Component {
   copyExport = () => {
     this.copyRef.current.select();
     document.execCommand("Copy");
+    alert('複製成功')
   }
   
   backToLast = () => {
@@ -228,12 +229,12 @@ class Comments extends Component {
               <option value="time">影片時間</option>
               <option value="popular">讚數</option>
               <option value="create">建立時間</option>
-              <option value="custom">自訂</option>
+              <option value="custom">子母留言</option>
             </select>
             <select value={filterBy} name='filterBy' 
               className='select' onChange={this.handleInputChange}>
               <option value="default">全部筆記</option>
-              <option value="questoin">問題</option>
+              <option value="question">問題</option>
               <option value="note">筆記</option>
               <option value="idea">點子</option>
             </select>
@@ -248,7 +249,8 @@ class Comments extends Component {
         </div>
         {isSearch && 
           <div className='nav__search'>
-            <input type='text' onChange={this.handleInputChange}  
+            <input type='text' onChange={this.handleInputChange}
+              placeholder='搜尋留言'  
               value={searchBy} name='searchBy' className='input-text'/>
           </div>}
         <div className='comments__board'>
@@ -261,7 +263,7 @@ class Comments extends Component {
           {showInfo && 
             <CourseInfo course={course} users={users} 
               getCourse={getCourse} isLoadingUpdateCourse={isLoadingUpdateCourse}
-              getUsers={getUsers} updateCourse={updateCourse}/>}
+              getUsers={getUsers} updateCourse={updateCourse} toggleInfo={this.toggleInfo}/>}
           {!showInfo && comments && commentList && commentList.map((comment, idx) => 
             <Comment key={idx} 
               comment={comment} isCustom={orderBy==='custom'}

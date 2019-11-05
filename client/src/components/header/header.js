@@ -15,10 +15,8 @@ class Header extends Component {
       <nav className='navigation'>
         <ul>
           <div className='logo'>
-            <Link to='/' className='link'>
-              <img src={logo} className="App-logo" alt="logo" />
-            </Link>
-            <p>VNote</p>
+            <img src={logo} className="App-logo" alt="logo" />
+            <Link to='/' className='link'><p>VNote</p></Link>
           </div>
           <div className='navigation__member'>
             {isLogin &&

@@ -46,11 +46,14 @@ class Video extends Component {
   }
 
   componentDidMount() {
-    this.renderVideo();
-    window.onYouTubeIframeAPIReady = () => {
-      this.renderVideo()
+    const {isLogin} = this.props;
+    if(isLogin) {
+      this.renderVideo();
+      window.onYouTubeIframeAPIReady = () => {
+        this.renderVideo()
+      }
+      window.addEventListener('resize', this.resizeSetSize);
     }
-    window.addEventListener('resize', this.resizeSetSize);
   }
   
   componentWillUnmount() {

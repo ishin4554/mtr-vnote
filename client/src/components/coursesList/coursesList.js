@@ -9,7 +9,6 @@ class CoursesList extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      id : 1,
       url: '',
       title: '',
       description: '',
@@ -38,6 +37,12 @@ class CoursesList extends Component {
     this.setState({
       isCreate: !isCreate
     })
+    this.setState({
+      message: '',
+      url: '',
+      title: '',
+      description: '',
+    })
   }
 
   handleSubmit = (evt) =>{
@@ -49,10 +54,11 @@ class CoursesList extends Component {
       this.setState({
         message: '請輸入標題'
       })
-    } else {
+    } else if(!url.includes('youtube')) {
       this.setState({
-        message: ''
+        message: '請輸入 youtube 網址'
       })
+    } else {
       createCourse({
         url: this.transUrl(url),
         title,
@@ -60,6 +66,7 @@ class CoursesList extends Component {
         isPublic: isPublic === 'on' ? true : false,
         userId: user.userId,
       })
+      this.handleSubmitModal();
     }
   }
 
@@ -76,10 +83,10 @@ class CoursesList extends Component {
     if(match.path === '/all') {
       !isLoadingGetCoursesList && this.getCoursesList();
     } else {
-      if(!isLogin) {
-        setUser();
+      if(isLogin) {
+        this.getCoursesList();
       } else {
-        !isLoadingGetCoursesList && this.getCoursesList();
+        setUser();
       }
     }
   }
@@ -96,7 +103,7 @@ class CoursesList extends Component {
     if(match.path !== prevProps.match.path) {
       this.getCoursesList();
     }
-    if(isLogin !== prevProps.isLogin) {
+    if(isLogin !== prevProps.isLogin && isLogin) {
       this.getCoursesList();
     }
     if(isLoadingCreateCourse !== prevProps.isLoadingCreateCourse &&
@@ -117,41 +124,44 @@ class CoursesList extends Component {
     const {
       courses, 
       user,
+      isLogin,
       isLoadingGetCoursesList, 
       isLoadingCreateCourse,
       deleteCourse,
       updateCourse,
       updateUser} = this.props;
-    const {isCreate, message} = this.state;
+    const {isCreate, message, url} = this.state;
     const loading = isLoadingGetCoursesList || isLoadingCreateCourse;
     return(
       <div>
         <HeaderContainer />
-        <div className='dashboard'>
+        <div>
           {isCreate && 
             <form className='modal__video' onSubmit={this.handleSubmit}>
-              <div className='modal__cancel' onClick={this.handleSubmitModal}>X</div>
               <h1>影片資訊</h1>
-              <input type='text' name='title' placeholder='標題' onChange={this.handleInputChange}/>
-              <input type='text' name='description' placeholder='敘述' onChange={this.handleInputChange}/>
+              <div className='modal__message'>{message}</div>
+              <p>標題</p>
+              <input type='text' name='title' placeholder='必填：請輸入標題' onChange={this.handleInputChange}/>
+              <p>敘述</p>
+              <input type='text' name='description' placeholder='關於影片的敘述' onChange={this.handleInputChange}/>
               <div className='modal__nav'>
                 <button type='submit'>送出</button>
-                <div>{message}</div>
+                <div className='modal__cancel' onClick={this.handleSubmitModal}>cancel</div>
               </div>
             </form>}
           <div className='dashboard__create'>
             <form onSubmit={this.handleSubmitModal}>
-              <input type='text' name='url' className='input-text'
+              <input type='text' name='url' className='input-text' value={url}
                 placeholder='輸入 youtube 網址' onChange={this.handleInputChange}></input>
               <button type='submit' className='button'><i className='material-icons md-18'>add_circle_outline</i></button>
             </form>
           </div>
-          <div className='coursesBoard'>
+          <div className='courses__board'>
             <div>
-              <Profile user={user} updateUser={updateUser}/>
+              {isLogin && <Profile user={user} updateUser={updateUser}/>}
               <hr/>   
-              <div className='coursesList'>     
-              {!loading &&
+              <div className='courses__list'>     
+              {!loading && isLogin &&
                 courses.filter(item => item.userId === user.userId)
                   .map((item, idx) => 
                   <CourseItem key={idx} courseItem={item}
@@ -163,7 +173,7 @@ class CoursesList extends Component {
             <div>
               <h3>共筆課程</h3>
               <hr/>
-              <div className='coursesList'>
+              <div className='courses__list'>
                 {!loading &&
                   courses.filter(item => item.userId !== user.userId)
                     .map((item, idx) => 

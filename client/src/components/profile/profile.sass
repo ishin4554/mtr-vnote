@@ -5,6 +5,12 @@
   justify-content: flex-start
   align-items: center
   width: 50%
+  .comment__edit
+    margin: 0
+    p
+      color: $text-color
+      font-size: $small
+      margin: 0
   .profile__avatar
     img
       +size(50px, 50px)
@@ -12,6 +18,7 @@
     &:hover
       i
         visibility: visible
+        cursor: pointer
     i
       visibility: hidden
       transform: translate(-150%, -50%)
@@ -23,3 +30,4 @@
         visibility: visible
     i
       visibility: hidden
+      cursor: pointer

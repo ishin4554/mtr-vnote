@@ -1,7 +1,11 @@
 import axios from "axios";
+import storage from "./storage";
 
 const instance = axios.create({
-  baseURL: 'http://localhost:5001/api'
+  baseURL: 'http://localhost:5001/api',
+  headers: {
+    authorization: storage.getCookie('token')
+  }
 });
 
 export const createCourse = course => instance.post("/courses", course);

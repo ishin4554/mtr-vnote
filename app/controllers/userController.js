@@ -55,7 +55,6 @@ const userController = {
   },
 
   loginUser: async (req, res) => {
-    console.log(req.body)
     const user = await UserModel.findOne({email: req.body.email});
     if(!user) {
       res.status(403).json(STATE.FAIL.NOLOGIN_ERR);

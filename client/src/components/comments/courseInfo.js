@@ -114,9 +114,10 @@ class CourseInfo extends Component {
 
   handleSubmit = (evt) => {
     const {choosedList} = this.state;
-    const {updateCourse, course} = this.props;
+    const {toggleInfo, updateCourse, course} = this.props;
     evt.preventDefault();
     updateCourse(course.id, {shareList: choosedList})
+    toggleInfo()
   }
 
   handleUpdateFinish = () => {

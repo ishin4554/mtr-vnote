@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './profile.sass';
+import { updateCourse } from '../../utlis/api';
 
 class Profile extends Component {
   constructor(props) {
@@ -36,6 +37,22 @@ class Profile extends Component {
     })
   }
 
+  updateAvatar = (evt) => {
+    evt.preventDefault();
+    const {url} = this.state;
+    const {updateUser, user} = this.props;
+    updateUser(user.userId, {url});
+    this.toggleEditAvatar();
+  }
+
+  updateNickname = (evt) => {
+    evt.preventDefault();
+    const {name} = this.state;
+    const {updateUser, user} = this.props;
+    updateUser(user.userId, {nickname: name});
+    this.toggleEditName();
+  }
+
   render() {
     const {user} =  this.props;
     const {isEditName, isEditAvatar, name, url} = this.state;
@@ -49,10 +66,11 @@ class Profile extends Component {
         </div>
         {isEditAvatar && 
         <div className='comment__edit'>
-          <form onSubmit={this.handleUpdateUrl}>
-            <input type='text' name='title'
+          <form onSubmit={this.updateAvatar}>
+            <input type='text' name='url'
               onChange={this.handleInputChange}
               className='input-text' value={url}/>
+            <p>註：請輸入圖片網址</p>
             <div className='edit__nav'>
               <div onClick={this.toggleEditAvatar}>cancel</div>
               <button type='submit'>Save</button>
@@ -66,8 +84,8 @@ class Profile extends Component {
         </h2>}
         {isEditName && 
         <div className='comment__edit'>
-          <form onSubmit={this.handleUpdateName}>
-            <input type='text' name='title'
+          <form onSubmit={this.updateNickname}>
+            <input type='text' name='name'
               onChange={this.handleInputChange}
               className='input-text' value={name}/>
             <div className='edit__nav'>

@@ -43,10 +43,23 @@ class Sign extends Component{
   }
 
   componentDidUpdate(prevProps) {
-    const {isLoadingLogin, isLogin, history} = this.props;
+    const {
+      isLoadingLogin, 
+      isLoadingCreateUser, 
+      loadingCreateUserError,
+      isLogin, history, setUser} = this.props;
     if(isLoadingLogin!== prevProps.isLoadingLogin && 
       !isLoadingLogin && isLogin) {
-      history.push('/courses/')
+        setUser();
+        history.push('/courses/')
+    }
+    if(isLoadingCreateUser!== prevProps.isLoadingCreateUser && 
+      !isLoadingCreateUser && !loadingCreateUserError) {
+        history.push('/login/')
+        this.setState({
+          email: '',
+          password: '',
+        })
     }
   }
 
@@ -74,8 +87,6 @@ class Sign extends Component{
           </div>
           <button className='sign__btn' type='submit'>{route === '/login' ? '登入' : '註冊'}</button>
           <div className='sign__info'>
-            {route === '/login' && 
-            <div className='sign__forget'>忘記密碼？（尚未開放）</div> }
             {route === '/login' && 
             <Link to='/register' className='link'>沒有帳號？</Link> }
             {route === '/register' && <Link className='link' to='/login'>已有帳號？</Link> }

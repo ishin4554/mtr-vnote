@@ -1,5 +1,5 @@
 import { ofType } from "redux-observable";
-import { from } from "rxjs";
+import { of, from } from "rxjs";
 import { catchError, map, switchMap } from "rxjs/operators";
 import { ActionTypes, Actions } from "../actions";
 import storage from "../utlis/storage";
@@ -15,7 +15,7 @@ export const login = action$ =>
           storage.addCookie(res.data.token);
           return Actions.LOGIN_RESULT(jwtDecode(res.data.token).payload);
         }),
-        catchError(error => Actions.LOGIN_FAILED(error))
+        catchError(error => of(Actions.LOGIN_FAILED(error)))
       )
     )
   )
@@ -26,7 +26,7 @@ export const createUser = action$ =>
     switchMap(action => 
       from(api.createUser(action.payload)).pipe(
         map(() => Actions.CREATE_USER_RESULT(null)),
-        catchError(error => Actions.CREATE_USER_RESULT(error))
+        catchError(error => of(Actions.CREATE_USER_RESULT(error)))
       )
     )
   )
