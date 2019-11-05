@@ -8,9 +8,17 @@ const CommentSchema = new Schema({
   category: String,
   createdAt:  {type: Date, default: Date.now},
   updatedAt:  {type: Date, default: Date.now},
+  like: Array,
   courseId: Number,
   userId: Number,
   parentId: Number
+}, { toJSON: { virtuals: true } });
+
+CommentSchema.virtual('user', {
+  ref: 'User',
+  localField: 'userId',
+  foreignField: 'id',
+  justOne: true
 });
 
 CommentSchema.plugin(autoIncrement.plugin, {

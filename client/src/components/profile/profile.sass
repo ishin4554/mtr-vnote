@@ -1,0 +1,25 @@
+@import '../../style.sass'
+
+.profile
+  display: flex
+  justify-content: flex-start
+  align-items: center
+  width: 50%
+  .profile__avatar
+    img
+      +size(50px, 50px)
+      border-radius: 50%
+    &:hover
+      i
+        visibility: visible
+    i
+      visibility: hidden
+      transform: translate(-150%, -50%)
+      color: $text-color
+  .profile__name
+    color: $text-color
+    &:hover
+      i
+        visibility: visible
+    i
+      visibility: hidden

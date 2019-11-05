@@ -5,7 +5,8 @@ import { Actions } from "../actions";
 
 const SignContainer = props => <Sign {...props} />;
 const mapStateToProps = store => ({
-
+  isLogin: store.user.isLogin,
+  isLoadingLogin: store.user.isLoadingLogin
 });
 
 const mapDispatchToProps = {

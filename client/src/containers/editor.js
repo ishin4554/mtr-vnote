@@ -5,6 +5,7 @@ import { Actions } from "../actions";
 
 const EditorContainer = props => <Editor {...props} />;
 const mapStateToProps = store => ({
+  player: store.course.player,
   isLoadingCreateComment: store.comment.isLoadingCreateComment,
 });
 

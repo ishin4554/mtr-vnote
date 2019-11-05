@@ -3,7 +3,8 @@ import { from } from "rxjs";
 import { catchError, map, switchMap } from "rxjs/operators";
 import { ActionTypes, Actions } from "../actions";
 import storage from "../utlis/storage";
-import * as api from "../api";
+import jwtDecode from "jwt-decode";
+import * as api from "../utlis/api";
 
 export const login = action$ =>
   action$.pipe(
@@ -12,9 +13,9 @@ export const login = action$ =>
       from(api.login(action.payload)).pipe(
         map(res => {
           storage.addCookie(res.data.token);
-          return Actions.LOGIN_RESULT(null);
+          return Actions.LOGIN_RESULT(jwtDecode(res.data.token).payload);
         }),
-        catchError(error => Actions.LOGIN_RESULT(error))
+        catchError(error => Actions.LOGIN_FAILED(error))
       )
     )
   )
@@ -30,3 +31,24 @@ export const createUser = action$ =>
     )
   )
 
+export const getUsers = action$ =>
+  action$.pipe(
+    ofType(ActionTypes.GET_USERS),
+    switchMap(action => 
+      from(api.getUsers(action.payload)).pipe(
+        map(res => Actions.GET_USERS_RESULT(res.data)),
+        catchError(error => Actions.GET_USERS_FAILED(error))
+      )
+    )
+  )
+
+export const updateUser = action$ =>
+  action$.pipe(
+    ofType(ActionTypes.UPDATE_USER),
+    switchMap(action => 
+      from(api.updateUser(action.id, action.user)).pipe(
+        map(() => Actions.UPDATE_USER_RESULT(null)),
+        catchError(error => Actions.UPDATE_USER_RESULT(error))
+      )
+    )
+  )

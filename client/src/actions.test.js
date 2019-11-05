@@ -194,7 +194,54 @@ describe('comment actions', () => {
     } 
     expect(Actions.GET_COMMENTS_LIST_FAILED(error)).toEqual(expectedAction)
   })
+  
+  it('DELETE_COMMENT', () => {
+    const id = 1;
+    const expectedAction = {
+      type: ActionTypes.DELETE_COMMENT,
+      id: 1
+    } 
+    expect(Actions.DELETE_COMMENT(id)).toEqual(expectedAction)
+  })
 
+  it('DELETE_COMMENT_RESULT', () => {
+    const error = 'gggggggg';
+    const expectedAction = {
+      type: ActionTypes.DELETE_COMMENT_RESULT,
+      error
+    } 
+    expect(Actions.DELETE_COMMENT_RESULT(error)).toEqual(expectedAction)
+  })
+
+  it('UPDATE_COMMENT', () => {
+    const id = 1;
+    const comment = {
+      time: '116',
+      content: '1111111',
+      category: 'question',
+      courseId: 1,
+      userId: 1,
+      parentId: null
+    };
+    const expectedAction = {
+      type: ActionTypes.UPDATE_COMMENT,
+      id,
+      comment
+    } 
+    expect(Actions.UPDATE_COMMENT(id, comment)).toEqual(expectedAction)
+  })
+
+  it('UPDATE_COMMENT_RESULT', () => {
+    const error = 'gggggggg';
+    const expectedAction = {
+      type: ActionTypes.UPDATE_COMMENT_RESULT,
+      error
+    } 
+    expect(Actions.UPDATE_COMMENT_RESULT(error)).toEqual(expectedAction)
+  })
+})
+
+describe('user actions', () => {
   it('LOGIN', () => {
     const payload= {
       email: 'gggg@gmail.com',
@@ -236,5 +283,4 @@ describe('comment actions', () => {
     } 
     expect(Actions.CREATE_USER_RESULT(error)).toEqual(expectedAction)
   })
-  
 })

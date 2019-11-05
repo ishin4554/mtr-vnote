@@ -6,8 +6,15 @@ const userSchema = new Schema({
   nickname:  String,
   email: String,
   password: String,
+  url: String,
   createdAt:  {type: Date, default: Date.now},
   updatedAt:  {type: Date, default: Date.now},
+}, { toJSON: { virtuals: true } });
+
+userSchema.virtual('commentsCount', {
+  ref: 'Comment',
+  localField: 'id',
+  foreignField: 'userId'
 });
 
 userSchema.plugin(autoIncrement.plugin, {

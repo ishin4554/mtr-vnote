@@ -3,39 +3,49 @@
 .editor 
   width: 80%
   margin: 0 auto
-  margin-top: 20px
+  margin-top: 10px
   form
+    position: relative
     textarea
-      +size(100%, 80px)
+      width: 100%
+      min-height: 80px
+      overflow: hidden
       border-radius: 5px
       border: none
+      color: $text-color
       padding: 10px
       outline: 0
       resize: none
       background: $surface-color
       caret-color: $text-color
       &:focus
-        filter: brightness(150%)
+        border: 1px solid $primary-color
+    .button
+      position: absolute
+      color: $primary-color
+      top: 40px
+      right: 10px
+      transform: translateY(-50%)
   .editor__nav
     display: flex
-    margin-top: 10px
+    margin-top: -40px
+    margin-left: 10px
+    .select
+      padding: 0 10px
+      background: $background-color
     &>*
       margin: 0 10px 0 0
-      border-radius: 5px
       &:hover 
         filter: brightness(110%)
     .editor__time
-      background: $surface-color
+      background: $background-color
       font-weight: 500
       color: $primary-color
-      text-align: center
-      +size(50px, auto)
-    button
-      background: $primary-color
-      color: $text-color
-      border: none
+      display: flex
+      align-items: center
+      justify-content: center
+      &>*
+        margin: 2px 10px
+    
       
-  select
-    background: $surface-color
-    outline: none
-    color: $text-color
+      

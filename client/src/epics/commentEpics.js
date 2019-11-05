@@ -2,7 +2,7 @@ import { ofType } from "redux-observable";
 import { from } from "rxjs";
 import { catchError, map, switchMap } from "rxjs/operators";
 import { ActionTypes, Actions } from "../actions";
-import * as api from "../api";
+import * as api from "../utlis/api";
 
 export const createComment = action$ =>
   action$.pipe(
@@ -25,3 +25,30 @@ export const getCommentsList = action$ =>
         )
     )
   )
+
+export const deleteComment = action$ =>
+  action$.pipe(
+    ofType(ActionTypes.DELETE_COMMENT),
+    switchMap(action => 
+      from(api.deleteComment(action.id)).pipe(
+          map(res => {
+            return Actions.DELETE_COMMENT_RESULT(null)
+          }),
+          catchError(error => Actions.DELETE_COMMENT_RESULT(error))
+        )
+    )
+  )
+
+export const updateComment = action$ =>
+  action$.pipe(
+    ofType(ActionTypes.UPDATE_COMMENT),
+    switchMap(action => 
+      from(api.updateComment(action.id, action.comment)).pipe(
+          map(res => {
+            return Actions.UPDATE_COMMENT_RESULT(null)
+          }),
+          catchError(error => Actions.UPDATE_COMMENT_RESULT(error))
+        )
+    )
+  )
+

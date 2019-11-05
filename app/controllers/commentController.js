@@ -3,8 +3,9 @@ const STATE = require('../constants/state');
 
 const commentController = {
   addComment: async (req, res) => {
+    console.log(req.body)
     const comment = new CommentModel({
-      ...req.body
+      ...req.body,
     });
     await comment.save();
     res.status(200).json(STATE.SUCCESS)
@@ -19,23 +20,23 @@ const commentController = {
       }, {})
       const comments = await CommentModel.find({
         ...query
-      })
+      }).populate({ path: 'user', select: 'id nickname' })
       res.json(comments);
     } catch(err) {
       console.log(err)
       res.status(500).json(STATE.FAIL);
-    }    
+    }   
   },
   updateComment: async (req, res) => {
     try{
-      const updateComment = await CommentModel.update(
+      await CommentModel.update(
         {id: req.params.id}, 
-        res.body);
+        req.body);
       res.json(STATE.SUCCESS);
     } catch(err) {
       console.log(err)
       res.status(500).json(STATE.FAIL);
-    }    
+    }
   },
   deleteComment: async (req, res) => {
     try{
@@ -45,7 +46,7 @@ const commentController = {
       console.log(err)
       res.status(500).json(STATE.FAIL);
     }    
-  }
+  },
 };
 
 module.exports = commentController;

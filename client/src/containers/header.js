@@ -5,6 +5,8 @@ import { Actions } from "../actions";
 
 const HeaderContainer = props => <Header {...props} />;
 const mapStateToProps = store => ({
+  user: store.user.user,
+  isLogin: store.user.isLogin,
   course: store.course.course,
   isLoadingCreateCourse: store.course.isLoadingCreateCourse,
   isLoadingGetCourse: store.course.isLoadingGetCourse,
@@ -14,5 +16,6 @@ const mapStateToProps = store => ({
 const mapDispatchToProps = {
   createCourse: Actions.CREATE_COURSE,
   getCourse: Actions.GET_COURSE,
+  logout: Actions.LOGOUT,
 }
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderContainer)

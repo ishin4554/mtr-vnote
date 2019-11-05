@@ -4,7 +4,12 @@ const defaultState = {
   comments: [],
   isLoadingCreateComment: false,
   isLoadingGetCommentsList: false,
-  getCommentsListError: null
+  isLoadingDeleteComment: false,
+  isLoadingUpdateComment: false,
+  createCommentError: null,
+  getCommentsListError: null,
+  deleteCommentError: null,
+  updateCommentError: null
 };
 
 function commentReducers(state = defaultState, action) {
@@ -40,6 +45,32 @@ function commentReducers(state = defaultState, action) {
         ...state,
         getCommentsListError: action.error,
       }
+    
+    case ActionTypes.DELETE_COMMENT: 
+      return {
+        ...state,
+        isLoadingDeleteComment: true
+      }
+
+    case ActionTypes.DELETE_COMMENT_RESULT:
+      return {
+        ...state,
+        isLoadingDeleteComment: false,
+        deleteCommentError: action.error
+      } 
+
+    case ActionTypes.UPDATE_COMMENT: 
+      return {
+        ...state,
+        isLoadingUpdateComment: true
+      }
+
+    case ActionTypes.UPDATE_COMMENT_RESULT:
+      return {
+        ...state,
+        isLoadingUpdateComment: false,
+        updateCommentError: action.error
+      } 
   
     default: 
       return state;

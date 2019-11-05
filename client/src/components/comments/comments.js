@@ -1,16 +1,145 @@
 import React, { Component } from 'react';
-import ExportModal from './exportModal';
-import course from '../../containers/course';
+import Comment from './comment';
 import './comments.sass';
+import CourseInfo from './courseInfo';
 
-class Comment extends Component {
+class Comments extends Component {
   constructor(props) {
     super(props)
+    this.state={
+      category: '',
+      orderBy: 'default',
+      filterBy: 'default',
+      searchBy: '',
+      seekTime: null,
+      currentTime: null,
+      currentReply: null,
+      isSearch: false,
+      isSort: false,
+      isSwap: false,
+      showInfo: false,
+    }
+    this.copyRef = React.createRef()
   }
-  handleVideoTime = (evt) => {
-    const time = evt.target.attributes['data-value'].value;
-    this.props.handleTime(time)
+
+  swapComments = () => {
+    const {isSwap} = this.state;
+    this.setState({
+      isSwap: !isSwap
+    })
   }
+
+  toggleInfo = () => {
+    const { showInfo } = this.state;
+    this.setState({
+      showInfo: !showInfo
+    })
+  }
+
+  toggleCustomSort = () => {
+    const { isSort } = this.state;
+    this.setState({
+      isSort: !isSort
+    })
+  }
+
+  handleSearchComments = () => {
+    const {isSearch} = this.state; 
+    this.setState({
+      isSearch: !isSearch
+    })
+  }
+
+  searchComments = (comments) => {
+    const { searchBy } = this.state;
+    if(searchBy) {
+      return [...comments].filter(comment => comment.content.includes(searchBy))
+    }
+    return comments
+  }
+
+  filterComments = (comments) => {
+    const { filterBy } = this.state;
+    if(filterBy !== 'default') {
+      return [...comments].filter(comment => comment.category === filterBy)
+    }
+    return comments
+  }
+
+  sortComments = (comments) => {
+    const { orderBy } = this.state;
+    switch(orderBy) {
+      case 'like':
+        return [...comments].sort((a, b) => a.like.length - b.like.length)
+      case 'create':
+        return [...comments].sort((a, b) => a.id - b.id)
+      case 'time':
+        return [...comments].sort((a, b) => a.time - b.time)
+      case 'custom':
+        return [...new Set([...comments].reduce((acc, parent) => {
+          const arr = comments.reduce((acc, child) => {
+            if(parent.id === child.parentId) {
+              acc.push(child)
+            }
+            return acc
+          }, [])
+          arr.unshift(parent)
+          acc.push(arr);
+          return acc;
+        }, []).flat())];
+      default:
+        return [...comments]
+    }
+  }
+
+  getCommentsList = () => {
+    const { courseId, getCommentsList } = this.props;
+    const payload = {
+      userId: '',
+      courseId
+    }
+    getCommentsList(payload);
+  }
+  
+  handleInputChange = (evt) => {
+    this.setState({
+      [evt.target.name] : evt.target.value
+    })
+  }
+
+  handleDeleteComment  = (id) => {
+    this.props.deleteComment(id)
+  }
+
+
+  handleUpdateComment = (id, comment) => {
+    const {updateComment} = this.props;
+    updateComment(id, comment);
+  }
+
+  handleTime = (time) => {
+    const { player } = this.props;
+    this.setState({
+      currentTime: player && player.getCurrentTime(),
+      seekTime: time
+    })
+    if(player) {
+      player.seekTo(time);
+      player.pauseVideo();
+    }
+  }
+
+  transExport = (comments, url, title) => {
+    let longText = '# '+title;
+    comments.forEach(comment => {
+      const time = this.handleTransTime(comment.time)
+      longText += `
+        [${time.min}:${time.sec}](${url}&t=${comment.time}s)
+        ${comment.content}`
+    })
+    return longText;
+  }
+
   handleTransTime = (time) => {
     const sec = Math.floor(time % 60);
     const min = Math.floor((time - sec)/60);
@@ -19,102 +148,128 @@ class Comment extends Component {
       min
     }
   }
-  handleTransCreateTime = (timeStr) => {
-    const transTime = new Date(timeStr);
-    const passTime = (transTime.getTime() - Date.now())/1000;
-    const time = {
-      day: -Math.floor(passTime/60/60/24),
-      hour: -Math.floor(passTime/60/60),
-      minute: -Math.floor(passTime/60)
-    }
-    if(time.minute < 60) return {unit: 'minutes', time: time.minute}
-    if(time.minute > 60 && time.hour < 24) return {unit: 'hours', time: time.hour}
-    if(time.hour > 24) return {unit: 'days', time: time.day}
-  }
 
-  render() {
-    const {comment} = this.props;
-    const showTime = this.handleTransTime(comment.time);
-    const time = this.handleTransCreateTime(comment.createdAt);
-    return(
-      <div className='comment'>
-        <div className='comment__info'>
-          <div className='comment__user'>{comment.userId}</div>
-          <div className='comment__createTime'>{time.time} {time.unit}</div>
-        </div>
-        <div className='comment__content'>
-          <div className='comment__time'>{showTime.min}:{showTime.sec}</div>
-          <div className='comment__category'>{comment.category}</div>
-          <div className='comment__text'data-value={comment.time} onClick={this.handleVideoTime}>{comment.content}</div>
-        </div>
-      </div>
-    )
+  copyExport = () => {
+    this.copyRef.current.select();
+    document.execCommand("Copy");
   }
-}
-
-class Comments extends Component {
-  constructor(props) {
-    super(props)
-    this.state={
-      category: '',
-      showExport: false,
-    }
-  }
-
-  setVideoTime = (time) => {
-    this.props.player.seekTo(time);
-    this.props.player.playVideo();
-  }
-
-  getCommentsList = () => {
-    const { courseId, getCommentsList } = this.props;
-    const payload = {
-      userId: 1,
-      courseId
-    }
-    getCommentsList(payload);
-  }
-
-  showExport = () => {
-    const {showExport} = this.state;
-    this.setState({
-      showExport: !showExport
-    }) 
+  
+  backToLast = () => {
+    this.props.player.seekTo(this.state.currentTime)
   }
 
   componentDidMount() {
     const { isLoadingGetCommentsList } = this.props;
     !isLoadingGetCommentsList && this.getCommentsList();
+    this.setState({
+      comments: this.props.comments
+    })
   }
 
   componentDidUpdate(prevProps) {
-    const { isLoadingCreateComment } = this.props;
-    if(isLoadingCreateComment !== prevProps.isLoadingCreateComment) {
+    const { 
+      isLoadingCreateComment, 
+      isLoadingDeleteComment,
+      isLoadingUpdateComment } = this.props;
+    if(isLoadingCreateComment !== prevProps.isLoadingCreateComment &&
+      !isLoadingCreateComment) {
+      this.getCommentsList();
+    }
+    if(isLoadingDeleteComment !== prevProps.isLoadingDeleteComment &&
+      !isLoadingDeleteComment) {
+      this.getCommentsList();
+    }
+    if(isLoadingUpdateComment !== prevProps.isLoadingUpdateComment &&
+      !isLoadingUpdateComment) {
       this.getCommentsList();
     }
   }
 
   render() {
-    const {comments} = this.props;
-    return(
-      <div className='comments'>
+    const { 
+      comments, 
+      url, 
+      title, 
+      course, 
+      users, 
+      user,
+      getUsers,
+      updateCourse, getCourse, isLoadingUpdateCourse } = this.props;
+    const { 
+      orderBy, 
+      filterBy, 
+      searchBy, 
+      isSearch, 
+      isSwap, 
+      seekTime, 
+      currentTime,
+      showInfo } = this.state;
+    const time = this.handleTransTime(currentTime)
+    const commentList = this.sortComments(this.filterComments(this.searchComments(comments)));
+    if(isSwap) {
+      commentList.reverse()
+    }
+    return (
+      <div className='comments'>  
+        {comments && commentList && 
+          <textarea ref={this.copyRef} className='comments__export'
+            onChange={this.handleChange}
+            value={this.transExport(commentList, url, title)} />}              
+        {seekTime && 
+          <div className='board__now' onClick={this.backToLast}>
+            回到剛剛瀏覽的位置 {time.min}:{time.sec}
+          </div>}
         <div className='comments__nav'>
-          <select value="default" name='filter'>
-            <option value="default" disabled>filter</option>
-            <option value="time">by video time</option>
-            <option value="popular">by popular</option>
-            <option value="create">by create time</option>
-            <option value="custom">by custom</option>
-          </select>
+          <div className='nav__left'>
+            <i className="material-icons" onClick={this.swapComments}>swap_vert</i>
+            <select value={orderBy} name='orderBy' 
+              className='select' onChange={this.handleInputChange}>
+              <option value="default" disabled>筆記排序</option>
+              <option value="time">影片時間</option>
+              <option value="popular">讚數</option>
+              <option value="create">建立時間</option>
+              <option value="custom">自訂</option>
+            </select>
+            <select value={filterBy} name='filterBy' 
+              className='select' onChange={this.handleInputChange}>
+              <option value="default">全部筆記</option>
+              <option value="questoin">問題</option>
+              <option value="note">筆記</option>
+              <option value="idea">點子</option>
+            </select>
+          </div>
           <div className='nav__right'>
-            <div><i class="material-icons md-18">search</i></div>
-            <div onClick={this.showExport}><i class="material-icons md-18">vertical_align_bottom</i></div>
+            <div onClick={this.handleSearchComments}><i className="material-icons">search</i></div>
+            <div onClick={this.toggleInfo}><i className="material-icons">info</i></div>
+            <div onClick={this.copyExport}>
+              <i className="material-icons">vertical_align_bottom</i>
+            </div>
           </div>
         </div>
-        {this.state.showExport && <ExportModal url={course.url} comments={comments} />}
+        {isSearch && 
+          <div className='nav__search'>
+            <input type='text' onChange={this.handleInputChange}  
+              value={searchBy} name='searchBy' className='input-text'/>
+          </div>}
         <div className='comments__board'>
-          {comments && 
-            comments.map((comment, idx) => <Comment key={idx} comment={comment} handleTime={this.setVideoTime}/>)}
+          {!showInfo && comments && commentList.length === 0 && 
+            <div className='comments__add'>
+              <div><i className="material-icons">fiber_new</i></div>
+              <div>快來新增筆記:)</div>
+            </div>
+          }
+          {showInfo && 
+            <CourseInfo course={course} users={users} 
+              getCourse={getCourse} isLoadingUpdateCourse={isLoadingUpdateCourse}
+              getUsers={getUsers} updateCourse={updateCourse}/>}
+          {!showInfo && comments && commentList && commentList.map((comment, idx) => 
+            <Comment key={idx} 
+              comment={comment} isCustom={orderBy==='custom'}
+              userId={user.userId}
+              handleDeleteComment={this.handleDeleteComment}
+              handleUpdateComment={this.handleUpdateComment}
+              handleReply = {this.props.handleReply}
+              currentTime={seekTime} handleTime={this.handleTime}/>)}
         </div>
       </div>
     )

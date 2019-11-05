@@ -4,6 +4,27 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const userController = {
+  getUsers: async (req, res) => {
+    try{
+      const query = Object.keys(req.query).reduce((acc, key) => {
+        if(req.query[key]) {
+          acc[key] = req.query[key];
+        } 
+        return acc;
+      }, {})
+      const users = await UserModel.find({
+        email: {
+          $regex: query.search,
+          $options: 'i'
+        }
+      },['id','nickname','url'],)
+      res.json(users);
+    } catch(err) {
+      console.log(err)
+      res.status(500).json(STATE.FAIL);
+    }   
+  },
+
   addUser: async (req, res) => {
     if(!req.body.email || !req.body.password) {
       res.status(403)
@@ -21,7 +42,20 @@ const userController = {
     }
   },
 
+  updateUser: async (req, res) => {
+    try{
+      await UserModel.update(
+        {id: req.params.id}, 
+        req.body);
+      res.json(STATE.SUCCESS);
+    } catch(err) {
+      console.log(err)
+      res.status(500).json(STATE.FAIL);
+    }    
+  },
+
   loginUser: async (req, res) => {
+    console.log(req.body)
     const user = await UserModel.findOne({email: req.body.email});
     if(!user) {
       res.status(403).json(STATE.FAIL.NOLOGIN_ERR);
@@ -30,7 +64,8 @@ const userController = {
       if(result) {
         const payload = {
           userId: user.id,
-          nicknam: user.nickname
+          nickname: user.nickname,
+          url: user.url
         };
         const token = jwt.sign({
           payload,

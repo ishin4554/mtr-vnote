@@ -12,16 +12,20 @@ router.get('/', (req, res) => res.end('hello'));
 // comments
 router.post('/comments', commentController.addComment);
 router.get('/comments', commentController.getComments);
-router.patch('/comments/:id', checkAuth, commentController.updateComment);
-router.delete('/comments/:id', checkAuth, commentController.deleteComment);
+router.patch('/comments/:id', commentController.updateComment);
+router.delete('/comments/:id', commentController.deleteComment);
 
 // course
-router.post('/courses', checkAuth, courseController.addCourse);
+router.post('/courses', courseController.addCourse);
 router.get('/courses', courseController.getCourses);
 router.get('/courses/:id', courseController.getCourse);
+router.delete('/courses/:id', courseController.deleteCourse);
+router.patch('/courses/:id', courseController.updateCourse);
 
 // user 
+router.get('/users', userController.getUsers);
 router.post('/users', userController.addUser);
+router.patch('/users/:id', userController.updateUser);
 router.post('/login', userController.loginUser);
 
 module.exports = router;

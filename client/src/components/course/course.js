@@ -1,99 +1,70 @@
 import React, { Component } from 'react';
 import './course.sass';
+import Video from '../../containers/video';
 import Comments from '../../containers/comment';
 import Editor from '../../containers/editor';
-import HeaderContainer from '../../containers/header';
-
-class CourseVideo extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  renderVideo = () => {
-    const {course, handlePlayer} = this.props;
-    const videoId = course.url.split('v=')[1];
-    handlePlayer(new window.YT.Player('player', {
-      videoId,
-    })) 
-  }
-
-  componentDidMount() {
-    if(!window.YT) {
-      const tag = document.createElement('script');
-      tag.src = "https://www.youtube.com/iframe_api";
-      const firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    } else {
-      this.renderVideo();
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    const {course} = this.props;
-    if(course !== prevProps.course) {
-      this.renderVideo();
-    }
-  } 
-
-  render() {
-    const {course} = this.props;
-    return (
-      <div className='video'>
-        {course && <div id='player'/>}
-      </div>
-    );
-  }
-}
+import Header from '../../containers/header';
+import Loading from '../loading';
 
 class Course extends Component {
   constructor(props) {
     super(props)
     this.state = {
       id : '',
-      player: null,
+      currentReply: null,
+      isLoadingVideo: true,
     }
-  }
-
-  handlePlayer = (player) => {
+    this.courseRef=React.createRef();
+    this.editorRef=React.createRef();
+  } 
+  
+  handleLoading = () => {
     this.setState({
-      player
-    }) 
+      isLoadingVideo: false
+    })
+  }
+  
+  handleReply = (replyId) => {
+    this.setState({
+      currentReply: replyId
+    })
   }
 
   getCourse = () => {
     const { getCourse } = this.props;
-    const { id } = this.state;
-    getCourse(id);
+    const { match } = this.props;
+    getCourse(match.params.id);
   }
 
   componentDidMount() {
-    const { isLoadingGetCourse } = this.props;
-    !isLoadingGetCourse && this.getCourse();
+    this.getCourse();
+    this.props.setUser();
   }
 
   componentDidUpdate(prevProps) {
-    const { match, isLoadingGetCourse } = this.props;
+    const { match } = this.props;
     if(match.params.id !== prevProps.match.params.id) {
       this.setState({
         id: match.params.id
       })
     }
-    // if(isLoadingGetCourse !== prevProps.isLoadingGetCourse && 
-    //   !isLoadingGetCourse) {
-    //   this.getCourse(this.state.id);
-    // }
   }
 
   render() {
-    const {course, isLoadingGetCourse} = this.props;
-    const { id, player } = this.state;
+    const { match, course, isLoadingGetCourse, user } = this.props;
+    const { currentReply, isLoadingVideo } = this.state;
+    const id = match.params.id;
     return(
       <div>
-        <HeaderContainer />
-        <div className='course'>        
-          {!isLoadingGetCourse && <CourseVideo course={course[0]} handlePlayer={this.handlePlayer}/>}
-          {!isLoadingGetCourse && <Editor player={player} courseId={id} userId={1}/>}
-          {!isLoadingGetCourse && <Comments player={player} courseId={id} course={course}/>}
+        {isLoadingGetCourse && isLoadingVideo && <Loading />}
+        <Header />
+        <div className='course' ref={this.courseRef}>
+          {course &&
+            <Video url={course.url} handleLoading={this.handleLoading}/>}
+          {course &&
+            <Editor courseId={id} userId={user.userId} link={currentReply}/>}
+          {course &&
+            <Comments courseId={id} url={course.url} title={course.title} handleReply={this.handleReply}/>}
         </div>
       </div>
     )

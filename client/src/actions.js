@@ -2,6 +2,14 @@ import EasyActions from 'redux-easy-actions';
 
 const { Actions, Constants } = EasyActions({
   // course
+  SET_PLAYER(type, player) {
+    return {type, player}
+  },
+
+  GET_PLAYER_FAIL(type, error) {
+    return {type, error}
+  },
+
   CREATE_COURSE(type, course) {
     return { type, course };
   },
@@ -22,8 +30,8 @@ const { Actions, Constants } = EasyActions({
     return { type, error };
   },
 
-  GET_COURSES_LIST(type, id) {
-    return { type, id };
+  GET_COURSES_LIST(type, payload) {
+    return { type, payload };
   },
 
   GET_COURSES_LIST_RESULT(type, courses) {
@@ -34,7 +42,22 @@ const { Actions, Constants } = EasyActions({
     return { type, error };
   },
 
+  DELETE_COURSE(type, id) {
+    return { type, id };
+  },
 
+  DELETE_COURSE_RESULT(type, error) {
+    return { type, error };
+  },
+
+  UPDATE_COURSE(type, id, course) {
+    return { type, id, course };
+  },
+
+  UPDATE_COURSE_RESULT(type, error) {
+    return { type, error };
+  },
+  
   // comment 
   CREATE_COMMENT(type, comment) {
     return { type, comment };
@@ -56,12 +79,60 @@ const { Actions, Constants } = EasyActions({
     return { type, error };
   },
 
+  DELETE_COMMENT(type, id) {
+    return { type, id };
+  },
+
+  DELETE_COMMENT_RESULT(type, error) {
+    return { type, error };
+  },
+
+  UPDATE_COMMENT(type, id, comment) {
+    return { type, id, comment };
+  },
+
+  UPDATE_COMMENT_RESULT(type, error) {
+    return { type, error };
+  },
+
   // user
+  GET_USERS(type, payload) {
+    return { type, payload };
+  },
+
+  GET_USERS_RESULT(type, users) {
+    return { type, users };
+  },
+
+  GET_USERS_FAILED(type, error) {
+    return { type, error };
+  },
+
+  UPDATE_USER(type, id, user) {
+    return { type, id, user };
+  },
+
+  UPDATE_USER_RESULT(type, error) {
+    return { type, error };
+  },
+
+  SET_USER(type) {
+    return { type };
+  },
+
+  LOGOUT(type) {
+    return { type };
+  },
+
   LOGIN(type, payload) {
     return { type, payload };
   },
 
-  LOGIN_RESULT(type, error) {
+  LOGIN_RESULT(type, user) {
+    return { type, user };
+  },
+
+  LOGIN_FAILED(type, error) {
     return { type, error };
   },
 

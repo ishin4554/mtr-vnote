@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-// app.options('*', cors());
+app.options('*', cors());
 app.use('/api', routes);
 
 module.exports = app

@@ -7,6 +7,7 @@ class Sign extends Component{
   constructor(props) {
     super(props)
     this.state = {
+      nickname: '',
       email: '',
       password: '',
     }
@@ -26,7 +27,7 @@ class Sign extends Component{
   handleLoginForm = (evt) => {
     evt.preventDefault()
     const { match, history, login, createUser } = this.props;
-    const { email, password } = this.state;
+    const { email, password, nickname } = this.state;
     const payload = {
       email,
       password
@@ -34,19 +35,35 @@ class Sign extends Component{
     if(match.path === '/login') {
       login(payload);
     } else {
-      createUser(payload);
+      createUser({
+        ...payload,
+        nickname
+      });
     }
-    history.push('/')
+  }
+
+  componentDidUpdate(prevProps) {
+    const {isLoadingLogin, isLogin, history} = this.props;
+    if(isLoadingLogin!== prevProps.isLoadingLogin && 
+      !isLoadingLogin && isLogin) {
+      history.push('/courses/')
+    }
   }
 
   render() {
-    const {email, password} = this.state;
+    const {email, password, nickname} = this.state;
     const route = this.props.match.path
     return(
       <div className='sign'>
         <div className='sign___previous' onClick={this.handlePreviousPage}>上一頁</div>
         <h1 className='sign__title'>{route === '/login' ? 'Login' : 'Register'}</h1>
         <form onSubmit={this.handleLoginForm}>
+          {route === '/register' && 
+            <div className='sign__username'>
+              Nickname <br /> <input type='text' name='nickname' value={nickname} 
+                onChange={this.handleInputChange} />
+            </div>
+          }
           <div className='sign__username'>
             Email <br /> <input type='text' name='email' value={email} 
               onChange={this.handleInputChange} />

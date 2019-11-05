@@ -3,6 +3,8 @@ import { ActionTypes } from "../actions";
 const defaultState = {
   course: {},
   courses: [],
+  player: null,
+  isLoadingSetPlayer: true,
   isLoadingCreateCourse: false,
   isLoadingGetCourse: false,
   isLoadingUpdateCourse: false,
@@ -11,10 +13,18 @@ const defaultState = {
   createCourseError: null,
   getCourseError: null,
   getCoursesListError: null,
+  deleteCourseError: null,
 };
 
 function courseReducers(state = defaultState, action) {
   switch(action.type){
+    case ActionTypes.SET_PLAYER:
+      return {
+        ...state,
+        player: action.player,
+        isLoadingSetPlayer: true
+      }
+    
     case ActionTypes.CREATE_COURSE:
       return {
         ...state,
@@ -65,7 +75,33 @@ function courseReducers(state = defaultState, action) {
         ...state,
         getCoursesError: action.error,
       }
-  
+
+    case ActionTypes.DELETE_COURSE:
+    return {
+      ...state,
+      isLoadingDeleteCourse: true
+    }
+
+    case ActionTypes.DELETE_COURSE_RESULT:
+      return {
+        ...state,
+        isLoadingDeleteCourse: false,
+        deleteCourseError: action.error,
+      }
+
+    case ActionTypes.UPDATE_COURSE: 
+      return {
+        ...state,
+        isLoadingUpdateCourse: true
+      }
+
+    case ActionTypes.UPDATE_COURSE_RESULT:
+      return {
+        ...state,
+        isLoadingUpdateCourse: false,
+        updateCourseError: action.error
+      } 
+
     default: 
       return state;
   }

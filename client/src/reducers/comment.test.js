@@ -96,4 +96,58 @@ describe('comment reducer', () => {
       getCommentsListError: 'error'
     });
   });
+
+  it('DELETE_COMMENT', () => {
+    const action = {
+      type: ActionTypes.DELETE_COMMENT,
+      id: 1
+    }
+    expect(commentReducers(defaultState, action)).toEqual({ 
+      ...defaultState,
+      isLoadingDeleteComment: true
+    });
+  });
+
+  it('DELETE_COMMENT_RESULT', () => {
+    const action = {
+      type: ActionTypes.DELETE_COMMENT_RESULT,
+      error: 'ggggg'
+    }
+    expect(commentReducers(defaultState, action)).toEqual({ 
+      ...defaultState,
+      isLoadingDeleteComment: false,
+      deleteCommentError: 'ggggg'
+    });
+  });
+
+  it('UPDATE_COMMENT', () => {
+    const action = {
+      type: ActionTypes.UPDATE_COMMENT,
+      id: 1,
+      comment: {
+        time: '50',
+        content: '3333333',
+        category: 'note',
+        courseId: 2,
+        userId: 1,
+        parentId: 1
+      }
+    }
+    expect(commentReducers(defaultState, action)).toEqual({ 
+      ...defaultState,
+      isLoadingUpdateComment: true
+    });
+  });
+
+  it('UPDATE_COMMENT_RESULT', () => {
+    const action = {
+      type: ActionTypes.UPDATE_COMMENT_RESULT,
+      error: 'ggggg'
+    }
+    expect(commentReducers(defaultState, action)).toEqual({ 
+      ...defaultState,
+      isLoadingUpdateComment: false,
+      updateCommentError: 'ggggg'
+    });
+  });
 });

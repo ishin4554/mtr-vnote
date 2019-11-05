@@ -1,0 +1,76 @@
+@import '../../style.sass'
+.cta__btn
+  display: inline-block
+  padding: 10px 20px 
+  background: $primary-color
+  color: $text-color
+  border-radius: 5px
+.home
+  position: absolute
+  display: inline-block
+  +size(100%, 100%)
+  top: 50px
+  .landing 
+    +size(100%, 100%)
+    background: $surface-color
+    .landing__info
+      position: absolute
+      width: 70%
+      left: 50%
+      top: 50%
+      transform: translate(-50%, -50%)
+      h1
+        color: $text-color
+        margin: 0
+        font-size: 96px 
+      h3
+        font-size: 48px
+        color: $text-color
+  .feature
+    +size(100%, auto)
+    padding: 50px 0
+    background: $primary-color
+    display: flex
+    flex-direction: column
+    align-items: center
+    h1
+      text-align: center
+      margin: 0
+      color: $text-color
+    p
+      color: $text-color
+    .feature__list
+      +size(70%, auto)
+      margin-top: 20px
+      display: flex
+      justify-content: space-around
+      flex-wrap: wrap
+      color: $text-color
+      padding-bottom: 40px
+      &>div
+        +size(20%, auto)
+        display: flex
+        flex-direction: column
+        align-items: center
+      .container
+        +size(auto, 70%)
+        object-fit: cover
+      h3
+        margin: 0
+      p
+        margin: 0
+        +size(100%, auto)
+.cta
+  +size(100%, auto)
+  background: $text-color
+  display: flex
+  justify-content: center
+  align-items: center
+  flex-direction: column
+  padding: 50px 0
+  &>*
+    margin: 10px
+  h3
+    margin: 0
+    font-size: 48px
+  
