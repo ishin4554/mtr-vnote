@@ -35,19 +35,13 @@ class CoursesList extends Component {
     evt.preventDefault()
     const {isCreate} = this.state;
     this.setState({
-      isCreate: !isCreate
-    })
-    this.setState({
-      message: '',
-      url: '',
-      title: '',
-      description: '',
+      isCreate: !isCreate,
     })
   }
 
   handleSubmit = (evt) =>{
     evt.preventDefault()
-    const {url, title, description, isPublic} = this.state;
+    const {url, title, description, isPublic, isCreate} = this.state;
     const {createCourse, user} = this.props;
     
     if(!title) {
@@ -66,7 +60,13 @@ class CoursesList extends Component {
         isPublic: isPublic === 'on' ? true : false,
         userId: user.userId,
       })
-      this.handleSubmitModal();
+      this.setState({
+        isCreate: !isCreate,
+        message: '',
+        title: '',
+        description: '',
+        url: ''
+      })
     }
   }
 
