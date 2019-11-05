@@ -1,13 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-// const path = require('path');
-
+const path = require('path');
 const routes = require('./routes');
 
 const app = express();
 
-// app.use(express.static(path.join(__dirname, '/../client/build')));
+app.use(express.static(path.join(__dirname, '/../client/build')));
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
