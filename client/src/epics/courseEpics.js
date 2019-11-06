@@ -1,5 +1,5 @@
 import { ofType } from "redux-observable";
-import { from } from "rxjs";
+import { of, from } from "rxjs";
 import { catchError, map, switchMap } from "rxjs/operators";
 import { ActionTypes, Actions } from "../actions";
 import * as api from "../utlis/api";
@@ -32,7 +32,7 @@ export const getCoursesList = action$ =>
     switchMap(action => 
       from(api.getCourses(action.payload)).pipe(
         map(res => Actions.GET_COURSES_LIST_RESULT(res.data)),
-        catchError(error => Actions.GET_COURSES_LIST_FAILED(error))
+        catchError(error => of(Actions.GET_COURSES_LIST_FAILED(error)))
       )
     )
   )

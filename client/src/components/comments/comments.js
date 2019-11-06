@@ -261,7 +261,7 @@ class Comments extends Component {
             </div>
           }
           {showInfo && 
-            <CourseInfo course={course} users={users} 
+            <CourseInfo course={course} users={users} user={user}
               getCourse={getCourse} isLoadingUpdateCourse={isLoadingUpdateCourse}
               getUsers={getUsers} updateCourse={updateCourse} toggleInfo={this.toggleInfo}/>}
           {!showInfo && comments && commentList && commentList.map((comment, idx) => 

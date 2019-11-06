@@ -23,6 +23,7 @@ router.patch('/courses/:id', checkAuth, courseController.updateCourse);
 
 // user 
 router.get('/users', checkAuth, userController.getUsers);
+router.get('/users/:id', checkAuth, userController.getUser);
 router.post('/users', userController.addUser);
 router.patch('/users/:id', checkAuth, userController.updateUser);
 router.post('/login', userController.loginUser);

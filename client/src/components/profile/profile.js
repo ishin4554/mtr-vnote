@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './profile.sass';
-import { updateCourse } from '../../utlis/api';
+import { updateCourse, getUser } from '../../utlis/api';
 
 class Profile extends Component {
   constructor(props) {
@@ -51,6 +51,13 @@ class Profile extends Component {
     const {updateUser, user} = this.props;
     updateUser(user.userId, {nickname: name});
     this.toggleEditName();
+  }
+
+  componentDidUpdate(prevProps) {
+    const {isLoadingUpdateUser, getUser, user} = this.props;
+    if(isLoadingUpdateUser !== prevProps.isLoadingUpdateUser && !isLoadingUpdateUser) {
+      getUser(user.userId);
+    }
   }
 
   render() {

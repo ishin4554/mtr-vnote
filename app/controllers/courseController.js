@@ -1,9 +1,8 @@
-const { CourseModel } = require('../models');
+const { CourseModel, UserModel } = require('../models');
 const STATE = require('../constants/state');
 
 const courseController = {
   addCourse: async (req, res) => {
-    console.log(req.body)
     const course = new CourseModel({
       ...req.body
     });
@@ -20,8 +19,8 @@ const courseController = {
       }, {})
       const courses = await CourseModel.find({
         $or: [
-          {userId: query.userId},
-          {shareList: query.userId}
+          {userId: Number(query.userId)},
+          {shareList: Number(query.userId)}
         ]
       }).populate({ path: 'user', select: 'id nickname' })
       res.json(courses);
@@ -34,7 +33,10 @@ const courseController = {
     try{
       const course = await CourseModel.findOne({id: req.params.id})
         .populate({ path: 'user', select: 'id nickname' })
-      res.json(course);
+      const share = await UserModel.find({
+        'id': { $in: course.shareList }
+      }, ['nickname', 'id', 'url'])
+      res.json({course, share});
     } catch(err) {
       console.log(err)
       res.status(500).json(STATE.FAIL);

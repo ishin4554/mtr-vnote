@@ -18,7 +18,8 @@ const checkAuth = async (req, res, next) => {
         }
       }
     } catch(err) {
-      console.log(err);
+      console.log(err.name)
+      res.status(403).json(STATE.FAIL.AUTH_ERR).end();
     }
   } else {
     res.status(403).json(STATE.FAIL.NOLOGIN_ERR).end();

@@ -19,6 +19,7 @@ const mapStateToProps = store => ({
 
 const mapDispatchToProps = {
   setUser: Actions.SET_USER,
+  getUser: Actions.GET_USER,
   updateUser: Actions.UPDATE_USER,
   getCoursesList: Actions.GET_COURSES_LIST,
   createCourse: Actions.CREATE_COURSE,

@@ -48,7 +48,7 @@ function courseReducers(state = defaultState, action) {
       return {
         ...state,
         isLoadingGetCourse: false,
-        course: action.course,
+        course: {...action.course.course, share: action.course.share}
       }
 
     case ActionTypes.GET_COURSE_FAILED:
@@ -71,6 +71,8 @@ function courseReducers(state = defaultState, action) {
       }
 
     case ActionTypes.GET_COURSES_LIST_FAILED:
+      alert(action.error)
+      window.location = '/#/login'
       return {
         ...state,
         getCoursesError: action.error,

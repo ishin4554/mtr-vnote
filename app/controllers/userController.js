@@ -4,6 +4,16 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const userController = {
+  getUser: async (req, res) => {
+    try{
+      const user = await UserModel.findOne({id: req.params.id},['id','nickname','url'])
+      res.json(user);
+    } catch(err) {
+      console.log(err)
+      res.status(500).json(STATE.FAIL);
+    }    
+  },
+
   getUsers: async (req, res) => {
     try{
       const query = Object.keys(req.query).reduce((acc, key) => {

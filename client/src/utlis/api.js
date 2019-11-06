@@ -18,6 +18,7 @@ export const getComments = payload => instance.get(`/comments?userId=${payload.u
 export const deleteComment = id => instance.delete(`/comments/${id}`);
 export const updateComment = (id, comment) => instance.patch(`/comments/${id}`, comment);
 
+export const getUser = id => instance.get(`/users/${id}`);
 export const getUsers = payload => instance.get(`/users?search=${payload.email}`);
 export const login = payload => instance.post("/login", payload)
 export const createUser = user => instance.post("/users", user)

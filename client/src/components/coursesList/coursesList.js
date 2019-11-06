@@ -124,7 +124,9 @@ class CoursesList extends Component {
     const {
       courses, 
       user,
+      getUser,
       isLogin,
+      isLoadingUpdateUser,
       isLoadingGetCoursesList, 
       isLoadingCreateCourse,
       deleteCourse,
@@ -158,7 +160,9 @@ class CoursesList extends Component {
           </div>
           <div className='courses__board'>
             <div>
-              {isLogin && <Profile user={user} updateUser={updateUser}/>}
+              {isLogin && 
+                <Profile user={user} updateUser={updateUser} getUser={getUser}
+                  isLoadingUpdateUser={isLoadingUpdateUser}/>}
               <hr/>   
               <div className='courses__list'>     
               {!loading && isLogin &&

@@ -12,8 +12,10 @@ export const login = action$ =>
     switchMap(action => 
       from(api.login(action.payload)).pipe(
         map(res => {
+          const user = jwtDecode(res.data.token).payload;
+          storage.removeCookie();
           storage.addCookie(res.data.token);
-          return Actions.LOGIN_RESULT(jwtDecode(res.data.token).payload);
+          return Actions.LOGIN_RESULT(user);
         }),
         catchError(error => of(Actions.LOGIN_FAILED(error)))
       )
@@ -38,6 +40,17 @@ export const getUsers = action$ =>
       from(api.getUsers(action.payload)).pipe(
         map(res => Actions.GET_USERS_RESULT(res.data)),
         catchError(error => Actions.GET_USERS_FAILED(error))
+      )
+    )
+  )
+
+export const getUser = action$ =>
+  action$.pipe(
+    ofType(ActionTypes.GET_USER),
+    switchMap(action => 
+      from(api.getUser(action.id)).pipe(
+        map(res => Actions.GET_USER_RESULT(res.data)),
+        catchError(error => of(Actions.GET_USER_FAILED(error)))
       )
     )
   )

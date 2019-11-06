@@ -9,7 +9,7 @@ const CourseSchema = new Schema({
   title: String,
   description: String,
   userId: Number,
-  shareList: Array, 
+  shareList: Array,
   createdAt:  {type: Date, default: Date.now},
   updatedAt:  {type: Date, default: Date.now},
 }, { toJSON: { virtuals: true } });

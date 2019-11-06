@@ -24,12 +24,12 @@ class ShareTag extends Component {
   }
 
   render() {
-    const {user, handleTag} = this.props;
+    const {user, isChoosed} = this.props;
     const {isChecked} = this.state;
     return(
-      <li className={isChecked ? 'share__tag isChecked' : 'share__tag'}>
+      <li className={isChoosed ? 'share__tag isChecked' : 'share__tag'}>
         <label htmlFor={user.nickname} onClick={this.toggleTag}>
-          {isChecked ? <i className='material-icons'>check</i> : ''}
+          {isChoosed ? <i className='material-icons'>check</i> : ''}
           {user.nickname}
         </label>
         <input type='checkbox' value={user.id} 
@@ -113,10 +113,11 @@ class CourseInfo extends Component {
   }
 
   handleSubmit = (evt) => {
+    evt.preventDefault();
     const {choosedList} = this.state;
     const {toggleInfo, updateCourse, course} = this.props;
-    evt.preventDefault();
-    updateCourse(course.id, {shareList: choosedList})
+    const shareList = choosedList.map(item => item.id);
+    updateCourse(course.id, {shareList})
     toggleInfo()
   }
 
@@ -135,6 +136,9 @@ class CourseInfo extends Component {
 
   componentDidMount() {
     const {getUsers} = this.props;
+    this.setState({
+      choosedList: this.props.course.share
+    })
     this.handleInputTag$
         .subscribe(debounced => getUsers({email: debounced}))
   }
@@ -146,7 +150,7 @@ class CourseInfo extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const {users, course, isLoadingUpdateCourse} = this.props;
+    const {users, course, getCourse, isLoadingUpdateCourse} = this.props;
     if(prevProps.users !== users) {
       this.setState({
         users
@@ -154,17 +158,18 @@ class CourseInfo extends Component {
     }
     if(isLoadingUpdateCourse !== prevProps.isLoadingUpdateCourse &&
       !isLoadingUpdateCourse) {
-      this.props.getCourse(course.id);
+      getCourse(course.id);
     }
   }
 
   render() {
-    const { course } = this.props;
+    const { course, user } = this.props;
     const { users, 
       isEditDescription, 
       isEditTitle, 
       description,
-      title } = this.state;
+      title,choosedList } = this.state;
+    const isOwnder = user.userId === course.userId;
     const showTime = time.handleTransCreateTime(course.updatedAt);
     return (
       <div className='course__info'>
@@ -215,7 +220,7 @@ class CourseInfo extends Component {
             </div>}
         </div>
         <hr />
-        <div className='share'>
+        {isOwnder && <div className='share'>
           <h4>共享權限</h4>
           <form onSubmit={this.handleSubmit}>
             <div className='share__input'>
@@ -226,12 +231,17 @@ class CourseInfo extends Component {
               <button type='submit'>確認新增</button>
             </div>     
             <ul>
-              {users && users.map((user, idx) =>
-                <ShareTag key={idx} user={user} handleTag={this.handleTag}/>
+              {choosedList && choosedList.map((item, idx) =>
+                <ShareTag isChoosed={true} user={item} handleTag={this.handleTag}/>
               )}
+              {users && users.map((user, idx) => {
+                if(!choosedList.find(item => item.id === user.id)) {
+                  return <ShareTag isChoosed={false} user={user} handleTag={this.handleTag}/>
+                }
+              })}
             </ul>
           </form>
-        </div>
+        </div>}
       </div>
     )
   }

@@ -8,16 +8,37 @@ const defaultState = {
   isLogin: false,
   isLoadingCreateUser: false,
   isLoadingLogin: false,
+  isLoadingGetUser: false,
   isLoadingGetUsers: false,
   isLoadingUpdateUser: false,
   loadingCreateUserError: null,
   loadingLoginError: null,
   loadingGetUsersError: null, 
+  loadingGetUserError: null,
   updateUserError: null,
 };
 
 function userReducers(state = defaultState, action) {
   switch(action.type){
+    case ActionTypes.GET_USER:
+      return {
+        ...state,
+        isLoadingGetUser: true
+      }
+
+    case ActionTypes.GET_USER_RESULT:
+      return {
+        ...state,
+        user: action.user,
+        isLoadingGetUser: false
+      }
+
+    case ActionTypes.GET_USER_FAILED:
+      return {
+        ...state,
+        loadingGetUserError: action.error
+      }
+
     case ActionTypes.GET_USERS:
       return {
         ...state,
@@ -39,7 +60,9 @@ function userReducers(state = defaultState, action) {
 
     case ActionTypes.SET_USER:
       const token = storage.getCookie('token')
-      if(token) {
+      const { exp } = jwtDecode(token);
+      const isExpired = Date.now() / 1000 > exp;
+      if(token && !isExpired) {
         return {
           ...state,
           user: jwtDecode(token).payload,

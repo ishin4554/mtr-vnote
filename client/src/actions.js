@@ -96,6 +96,18 @@ const { Actions, Constants } = EasyActions({
   },
 
   // user
+  GET_USER(type, id) {
+    return { type, id };
+  },
+
+  GET_USER_RESULT(type, user) {
+    return { type, user };
+  },
+
+  GET_USER_FAILED(type, error) {
+    return { type, error };
+  },
+
   GET_USERS(type, payload) {
     return { type, payload };
   },
