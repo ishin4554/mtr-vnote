@@ -92,11 +92,11 @@
     border-bottom: 1px solid $primary-color
     margin-left: 10px
   .board__now
+    color: $text-color
     position: absolute
     z-index: 5
     bottom: 100px
     left: 50%
-    transform: translate(-50%)
     background: $primary-color
     box-shadow: inset hoff voff blur #000
     display: flex
@@ -105,7 +105,17 @@
     padding: 10px
     text-align: center
     border-radius: 5px
+    transform: translate(-50%)
     box-shadow: 1px 1px 8px rgba($primary-color, .2)
+    animation: flash .5s
+
+@keyframes flash
+  0% 
+    transform: translate(-50%) scale(1)
+  50% 
+    transform: translate(-50%) scale(1.2)
+  100% 
+    transform: translate(-50%) scale(1)
 .comments__board
   +size(100%, 90%)
   overflow: scroll

@@ -17,7 +17,9 @@ export const login = action$ =>
           storage.addCookie(res.data.token);
           return Actions.LOGIN_RESULT(user);
         }),
-        catchError(error => of(Actions.LOGIN_FAILED(error)))
+        catchError(error => {
+          return of(Actions.LOGIN_FAILED(error.response.data))
+        })
       )
     )
   )
@@ -28,7 +30,7 @@ export const createUser = action$ =>
     switchMap(action => 
       from(api.createUser(action.payload)).pipe(
         map(() => Actions.CREATE_USER_RESULT(null)),
-        catchError(error => of(Actions.CREATE_USER_RESULT(error)))
+        catchError(error => of(Actions.CREATE_USER_RESULT(error.response.data)))
       )
     )
   )
@@ -39,7 +41,7 @@ export const getUsers = action$ =>
     switchMap(action => 
       from(api.getUsers(action.payload)).pipe(
         map(res => Actions.GET_USERS_RESULT(res.data)),
-        catchError(error => Actions.GET_USERS_FAILED(error))
+        catchError(error => Actions.GET_USERS_FAILED(error.response.data))
       )
     )
   )
@@ -50,7 +52,7 @@ export const getUser = action$ =>
     switchMap(action => 
       from(api.getUser(action.id)).pipe(
         map(res => Actions.GET_USER_RESULT(res.data)),
-        catchError(error => of(Actions.GET_USER_FAILED(error)))
+        catchError(error => of(Actions.GET_USER_FAILED(error.response.data)))
       )
     )
   )
@@ -61,7 +63,7 @@ export const updateUser = action$ =>
     switchMap(action => 
       from(api.updateUser(action.id, action.user)).pipe(
         map(() => Actions.UPDATE_USER_RESULT(null)),
-        catchError(error => Actions.UPDATE_USER_RESULT(error))
+        catchError(error => Actions.UPDATE_USER_RESULT(error.response.data))
       )
     )
   )

@@ -5,6 +5,7 @@ import Course from "./course";
 import Sign from "./sign";
 import Home from "./home";
 import CoursesList from "./coursesList";
+import NotFound from "../components/notFound";
 
 
 const Routes = () => {
@@ -15,6 +16,7 @@ const Routes = () => {
       <Route exact path='/login' component={Sign} />
       <Route exact path='/register' component={Sign} />
       <Route exact path='/courses' component={CoursesList} />
+      <Route path="" component={NotFound} />
     </Switch>
   );
 };

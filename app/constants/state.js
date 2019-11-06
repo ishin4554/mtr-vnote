@@ -3,17 +3,25 @@ const STATE = {
     message: 'success',
   },
   FAIL: {
+    DB_ERR: {
+      name: 'DB_ERR',
+      message: '待補：執行過程的錯誤',
+    },
     PASSWORD_ERR: {
-      message: 'ProblemPassword',
+      name: 'PASSWORD_ERR',
+      message: '錯誤 Email 密碼',
     },
     EMAIL_ERR: {
-      message: 'ProblemEmail',
+      name: 'EMAIL_ERR',
+      message: '錯誤 Email',
     },
     NOLOGIN_ERR: {
-      message: 'ProblemNoEmail',
+      name: 'NOLOGIN_ERR',
+      message: '沒有此 Email',
     },
     AUTH_ERR: {
-      message: 'ProblemToken',
+      name: 'AUTH_ERR',
+      message: '驗證錯誤',
     }
   },
 };

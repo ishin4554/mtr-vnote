@@ -31,6 +31,7 @@ class Comment extends Component {
   handleDeleteClick = () => {
     const {comment} = this.props;
     this.props.handleDeleteComment(comment.id)
+    alert('刪除留言')
   }
 
   handleUpdateSave = (evt) => {

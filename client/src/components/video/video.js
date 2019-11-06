@@ -29,9 +29,13 @@ class Video extends Component {
 
   loadVideo = (evt) => {
     const {url} = this.props;
-    const videoId = url.split('v=')[1];
-    evt.target.loadVideoById(videoId);
-    this.setVideoSize(evt);
+    if(url) {
+      const videoId = url.split('v=')[1];
+      evt.target.loadVideoById(videoId);
+      this.setVideoSize(evt);
+    } else {
+      console.log(this.props)
+    }
   }
 
   setVideoSize = (evt) => {

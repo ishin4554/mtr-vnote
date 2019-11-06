@@ -29,11 +29,12 @@ function userReducers(state = defaultState, action) {
     case ActionTypes.GET_USER_RESULT:
       return {
         ...state,
-        user: action.user,
+        user: {...action.user, userId: action.user.id},
         isLoadingGetUser: false
       }
 
     case ActionTypes.GET_USER_FAILED:
+      alert(action.error.message)
       return {
         ...state,
         loadingGetUserError: action.error
@@ -53,6 +54,7 @@ function userReducers(state = defaultState, action) {
       }
 
     case ActionTypes.GET_USERS_FAILED:
+      alert(action.error.message)
       return {
         ...state,
         loadingGetUsersError: action.error
@@ -69,7 +71,8 @@ function userReducers(state = defaultState, action) {
           isLogin: true,
         }
       } else {
-        alert('還未登入')
+        alert('token 逾期，請重新登入')
+        window.location='/#/login'
         return {
           ...state,
           user: null,
@@ -84,6 +87,9 @@ function userReducers(state = defaultState, action) {
       }
 
     case ActionTypes.UPDATE_USER_RESULT:
+      if(action.error) {
+        alert(action.error.message);
+      }
       return {
         ...state,
         isLoadingUpdateUser: false,
@@ -92,6 +98,7 @@ function userReducers(state = defaultState, action) {
 
     case ActionTypes.LOGOUT:
       storage.removeCookie();
+      alert('登出成功')
       return {
         ...state,
         user: null,
@@ -109,11 +116,12 @@ function userReducers(state = defaultState, action) {
         ...state,
         isLoadingLogin: false,
         user: action.user,
-        isLogin: true
+        isLogin: true,
+        loadingLoginError: null
       }
 
     case ActionTypes.LOGIN_FAILED:
-      alert(action.error)
+      alert(action.error.message);
       return {
         ...state,
         isLoadingLogin: false,
@@ -127,6 +135,9 @@ function userReducers(state = defaultState, action) {
       }
 
     case ActionTypes.CREATE_USER_RESULT:
+      if(action.error) {
+        alert(action.error.message);
+      }
       return {
         ...state,
         isLoadingCreateUser: false,

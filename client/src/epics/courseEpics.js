@@ -10,7 +10,7 @@ export const createCourse = action$ =>
     switchMap(action => 
       from(api.createCourse(action.course)).pipe(
           map(() => Actions.CREATE_COURSE_RESULT(null)),
-          catchError(error => Actions.CREATE_COURSE_RESULT(error))
+          catchError(error => Actions.CREATE_COURSE_RESULT(error.response.data))
         )
     )
   )
@@ -21,7 +21,7 @@ export const getCourse = action$ =>
     switchMap(action => 
       from(api.getCourse(action.id)).pipe(
         map(res => Actions.GET_COURSE_RESULT(res.data)),
-        catchError(error => Actions.GET_COURSE_RESULT(error))
+        catchError(error => Actions.GET_COURSE_RESULT(error.response.data))
       )
     )
   )
@@ -32,7 +32,7 @@ export const getCoursesList = action$ =>
     switchMap(action => 
       from(api.getCourses(action.payload)).pipe(
         map(res => Actions.GET_COURSES_LIST_RESULT(res.data)),
-        catchError(error => of(Actions.GET_COURSES_LIST_FAILED(error)))
+        catchError(error => of(Actions.GET_COURSES_LIST_FAILED(error.response.data)))
       )
     )
   )
@@ -43,7 +43,7 @@ export const deleteCourse = action$ =>
     switchMap(action => 
       from(api.deleteCourse(action.id)).pipe(
         map(() => Actions.DELETE_COURSE_RESULT(null)),
-        catchError(error => Actions.DELETE_COURSE_RESULT(error))
+        catchError(error => Actions.DELETE_COURSE_RESULT(error.response.data))
       )
     )
   )
@@ -54,7 +54,7 @@ export const updateCourse = action$ =>
     switchMap(action => 
       from(api.updateCourse(action.id, action.course)).pipe(
         map(() => Actions.UPDATE_COURSE_RESULT(null)),
-        catchError(error => Actions.UPDATE_COURSE_RESULT(error))
+        catchError(error => Actions.UPDATE_COURSE_RESULT(error.response.data))
       )
     )
   )

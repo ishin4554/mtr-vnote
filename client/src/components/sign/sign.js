@@ -47,15 +47,16 @@ class Sign extends Component{
       isLoadingLogin, 
       isLoadingCreateUser, 
       loadingCreateUserError,
+      loadingLoginError,
       isLogin, history, setUser} = this.props;
     if(isLoadingLogin!== prevProps.isLoadingLogin && 
-      !isLoadingLogin && isLogin) {
-        setUser();
+      !isLoadingLogin && isLogin && !loadingLoginError) {
         history.push('/courses/')
     }
     if(isLoadingCreateUser!== prevProps.isLoadingCreateUser && 
       !isLoadingCreateUser && !loadingCreateUserError) {
         history.push('/login/')
+        alert('註冊成功，請重新登入')
         this.setState({
           email: '',
           password: '',

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import HeaderContainer from '../../containers/header';
 import CourseItem from './courseItem';
 import Profile from '../profile';
-
+import Loading from '../loading'
 import './coursesList.sass'
 
 class CoursesList extends Component {
@@ -79,15 +79,11 @@ class CoursesList extends Component {
   }
 
   componentDidMount() {
-    const { isLoadingGetCoursesList, isLogin, setUser, match } = this.props;
-    if(match.path === '/all') {
-      !isLoadingGetCoursesList && this.getCoursesList();
+    if(this.props.user) {
+      this.getCoursesList();
     } else {
-      if(isLogin) {
-        this.getCoursesList();
-      } else {
-        setUser();
-      }
+      alert('請登入')
+      this.props.history.goBack();
     }
   }
   
@@ -97,15 +93,13 @@ class CoursesList extends Component {
       isLoadingCreateCourse,
       isLoadingUpdateCourse,
       isLoadingDeleteCourse,
-      isLogin,
-      match
+      isLogin
     } = this.props;
-    if(match.path !== prevProps.match.path) {
-      this.getCoursesList();
-    }
+
     if(isLogin !== prevProps.isLogin && isLogin) {
       this.getCoursesList();
     }
+
     if(isLoadingCreateCourse !== prevProps.isLoadingCreateCourse &&
       !isLoadingCreateCourse){
       this.getCoursesList()
@@ -133,10 +127,11 @@ class CoursesList extends Component {
       updateCourse,
       updateUser} = this.props;
     const {isCreate, message, url} = this.state;
-    const loading = isLoadingGetCoursesList || isLoadingCreateCourse;
+    const isLoading = isLoadingUpdateUser || isLoadingGetCoursesList || isLoadingCreateCourse;
     return(
       <div>
         <HeaderContainer />
+        {isLoading && <Loading />}
         <div>
           {isCreate && 
             <form className='modal__video' onSubmit={this.handleSubmit}>
@@ -165,8 +160,8 @@ class CoursesList extends Component {
                   isLoadingUpdateUser={isLoadingUpdateUser}/>}
               <hr/>   
               <div className='courses__list'>     
-              {!loading && isLogin &&
-                courses.filter(item => item.userId === user.userId)
+              {!isLoading && isLogin &&
+                [...courses].filter(item => item.userId === user.userId)
                   .map((item, idx) => 
                   <CourseItem key={idx} courseItem={item}
                     isShare={false}
@@ -178,8 +173,8 @@ class CoursesList extends Component {
               <h3>共筆課程</h3>
               <hr/>
               <div className='courses__list'>
-                {!loading &&
-                  courses.filter(item => item.userId !== user.userId)
+                {!isLoading &&
+                  [...courses].filter(item => item.userId !== user.userId)
                     .map((item, idx) => 
                     <CourseItem key={idx} isShare={true} courseItem={item} />)}
               </div>        

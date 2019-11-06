@@ -26,7 +26,7 @@ const courseController = {
       res.json(courses);
     } catch(err) {
       console.log(err)
-      res.status(500).json(STATE.FAIL);
+      res.status(500).json({...STATE.FAIL.DB_ERR, message: err.name});
     }    
   },
   getCourse: async (req, res) => {
@@ -39,7 +39,7 @@ const courseController = {
       res.json({course, share});
     } catch(err) {
       console.log(err)
-      res.status(500).json(STATE.FAIL);
+      res.status(500).json({...STATE.FAIL.DB_ERR, message: err.name});
     }    
   },
   deleteCourse: async (req, res) => {
@@ -48,7 +48,7 @@ const courseController = {
       res.json(STATE.SUCCESS);
     } catch(err) {
       console.log(err)
-      res.status(500).json(STATE.FAIL);
+      res.status(500).json({...STATE.FAIL.DB_ERR, message: err.name});
     }    
   },
   updateCourse: async (req, res) => {
@@ -59,7 +59,7 @@ const courseController = {
       res.json(STATE.SUCCESS);
     } catch(err) {
       console.log(err)
-      res.status(500).json(STATE.FAIL);
+      res.status(500).json({...STATE.FAIL.DB_ERR, message: err.name});
     }    
   },
 }

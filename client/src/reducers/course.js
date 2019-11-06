@@ -32,6 +32,9 @@ function courseReducers(state = defaultState, action) {
       }
 
     case ActionTypes.CREATE_COURSE_RESULT:
+      if(action.error) {
+        alert(action.error.message)
+      }
       return {
         ...state,
         isLoadingCreateCourse: false,
@@ -52,6 +55,7 @@ function courseReducers(state = defaultState, action) {
       }
 
     case ActionTypes.GET_COURSE_FAILED:
+      alert(action.error.message)
       return {
         ...state,
         getCourseError: action.error,
@@ -71,7 +75,8 @@ function courseReducers(state = defaultState, action) {
       }
 
     case ActionTypes.GET_COURSES_LIST_FAILED:
-      alert(action.error)
+      alert(action.error.message)
+      window.location= '/'
       return {
         ...state,
         getCoursesError: action.error,
@@ -84,6 +89,9 @@ function courseReducers(state = defaultState, action) {
     }
 
     case ActionTypes.DELETE_COURSE_RESULT:
+      if(action.error) {
+        alert(action.error.message)
+      }
       return {
         ...state,
         isLoadingDeleteCourse: false,
@@ -97,6 +105,9 @@ function courseReducers(state = defaultState, action) {
       }
 
     case ActionTypes.UPDATE_COURSE_RESULT:
+      if(action.error) {
+        alert(action.error.message)
+      }
       return {
         ...state,
         isLoadingUpdateCourse: false,
