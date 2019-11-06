@@ -72,7 +72,6 @@ function courseReducers(state = defaultState, action) {
 
     case ActionTypes.GET_COURSES_LIST_FAILED:
       alert(action.error)
-      window.location = '/#/login'
       return {
         ...state,
         getCoursesError: action.error,
