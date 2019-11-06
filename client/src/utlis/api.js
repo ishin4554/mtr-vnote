@@ -2,7 +2,7 @@ import axios from "axios";
 import storage from "./storage";
 
 const instance = axios.create({
-  baseURL: 'http://localhost:5001/api',
+  baseURL: '/api',
   headers: {
     authorization: storage.getCookie('token')
   }
