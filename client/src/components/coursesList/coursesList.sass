@@ -150,6 +150,20 @@
     color: rgba($text-color, .5)
     font-size: $small
 
+.my-node-enter 
+  opacity: 0
+
+.my-node-enter-active 
+  opacity: 1
+  transition: opacity 1s
+
+.my-node-exit 
+  opacity: 1
+
+.my-node-exit-active 
+  opacity: 0
+  transition: opacity 200ms
+
 @media all and (max-width: 720px)
   .modal__video
     +size(100%, 100%)

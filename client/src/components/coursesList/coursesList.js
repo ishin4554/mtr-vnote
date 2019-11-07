@@ -79,11 +79,12 @@ class CoursesList extends Component {
   }
 
   componentDidMount() {
-    if(this.props.user) {
+    const {user, history, isLogin} = this.props;
+    if(user && isLogin) {
       this.getCoursesList();
     } else {
       alert('請登入')
-      this.props.history.goBack();
+      history.goBack();
     }
   }
   

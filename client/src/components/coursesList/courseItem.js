@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import time from '../../utlis/time';
+import { CSSTransition } from 'react-transition-group';
+
 class CourseItem extends Component {
   constructor(props) {
     super(props);
@@ -9,6 +11,7 @@ class CourseItem extends Component {
       isEdit: false,
       showPublic: false,
       content: '',
+      inProp: false
     }
   }
 
@@ -39,6 +42,12 @@ class CourseItem extends Component {
     this.toggleEditCourse();
   }
 
+  componentDidMount = () => {
+    this.setState({
+      inProp: true
+    })
+  }
+
   componentDidUpdate = (prevProps, prevState) => {
     const {handle} = this.state;
     const {deleteCourse, courseItem} = this.props;
@@ -61,10 +70,11 @@ class CourseItem extends Component {
 
   render() {
     const {courseItem, isShare} = this.props;
-    const {handle, isEdit, content} = this.state;
+    const {handle, isEdit, content,inProp } = this.state;
     const ytId = courseItem.url.split('v=')[1];
     const showTime = time.handleTransCreateTime(courseItem.updatedAt);
     return (
+      <CSSTransition in={inProp} timeout={200} classNames="my-node">
       <div className='course__item'>
         <div className='courseItem__container'>
           <div className={courseItem.isFinish ? 'tag isFinish': 'tag'}>
@@ -103,6 +113,7 @@ class CourseItem extends Component {
           </select>}
         </div>
       </div>
+      </CSSTransition>
     );
   }
 }
