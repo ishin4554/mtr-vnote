@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Comment from './comment';
 import './comments.sass';
 import CourseInfo from './courseInfo';
+import Loading from '../loading';
 
 class Comments extends Component {
   constructor(props) {
@@ -193,8 +194,8 @@ class Comments extends Component {
       title, 
       course, 
       users, 
-      user,
-      getUsers,
+      user, isLoadingUpdateComment, isLoadingDeleteComment, 
+      getUsers, isLoadingCreateComment, isLoadingGetCommentsList,
       updateCourse, getCourse, isLoadingUpdateCourse } = this.props;
     const { 
       orderBy, 
@@ -207,11 +208,14 @@ class Comments extends Component {
       showInfo } = this.state;
     const time = this.handleTransTime(currentTime)
     const commentList = this.sortComments(this.filterComments(this.searchComments(comments)));
+    const isLoading = isLoadingUpdateCourse || isLoadingCreateComment || 
+      isLoadingUpdateComment || isLoadingDeleteComment || isLoadingGetCommentsList ;
     if(isSwap) {
       commentList.reverse()
     }
     return (
       <div className='comments'>  
+        {isLoading && <Loading />}
         {comments && commentList && 
           <textarea ref={this.copyRef} className='comments__export'
             onChange={this.handleChange}

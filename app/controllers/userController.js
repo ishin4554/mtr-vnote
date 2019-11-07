@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const userController = {
   getUser: async (req, res) => {
     try{
-      if(req.user.id === req.params.id) {
+      if(req.user.id ===  Number(req.params.id)) {
         const user = await UserModel.findOne({id: req.params.id},['id','nickname','url'])
         res.json(user);
       } else {
@@ -61,7 +61,7 @@ const userController = {
 
   updateUser: async (req, res) => {
     try{
-      if(req.user.id === req.params.id) {
+      if(req.user.id === Number(req.params.id)) {
         await UserModel.update(
           {id: req.params.id}, 
           req.body);
