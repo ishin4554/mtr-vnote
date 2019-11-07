@@ -11,7 +11,9 @@ const checkAuth = async (req, res, next) => {
       if(payload) {
         const user = await UserModel.findOne({id: payload.userId});
         if(user) {
-          req.users = { ...payload };
+          req.user = { 
+            id: user.id
+          };
           next();
         } else {
           res.status(403).json(STATE.FAIL.AUTH_ERR).end();

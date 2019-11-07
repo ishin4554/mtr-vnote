@@ -5,7 +5,7 @@
   "scripts": {
     "start": "NODE_ENV=production cd app && node server.js",
     "test": "NODE_ENV=test jest --watch",
-    "heroku-postbuild": "cd client && npm install && npm run build" 
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -21,6 +21,7 @@
     "mongoose": "^5.7.3",
     "mongoose-auto-increment": "^5.0.1",
     "path": "^0.12.7",
+    "react-dom": "^16.11.0",
     "redux-observable": "^1.2.0",
     "rxjs": "^6.5.3",
     "sinon": "^7.5.0",

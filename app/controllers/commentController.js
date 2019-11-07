@@ -3,7 +3,6 @@ const STATE = require('../constants/state');
 
 const commentController = {
   addComment: async (req, res) => {
-    console.log(req.body)
     const comment = new CommentModel({
       ...req.body,
     });
@@ -24,27 +23,37 @@ const commentController = {
       res.json(comments);
     } catch(err) {
       console.log(err)
-      res.status(500).json(STATE.FAIL);
+      res.status(500).json({...STATE.FAIL.DB_ERR, message: err.name});
     }   
   },
   updateComment: async (req, res) => {
     try{
-      await CommentModel.update(
-        {id: req.params.id}, 
-        req.body);
-      res.json(STATE.SUCCESS);
+      const comment = await CommentModel.findOne({id: req.params.id});
+      if(req.user.id === comment.userId) {
+        await CommentModel.update(
+          {id: req.params.id}, 
+          req.body);
+        res.json(STATE.SUCCESS);
+      } else {
+        res.status(500).json(STATE.FAIL.NOLOGIN_ERR);
+      }
     } catch(err) {
       console.log(err)
-      res.status(500).json(STATE.FAIL);
+      res.status(500).json({...STATE.FAIL.DB_ERR, message: err.name});
     }
   },
   deleteComment: async (req, res) => {
     try{
-      await CommentModel.deleteOne({ id: req.params.id });
-      res.json(STATE.SUCCESS);
+      const comment = await CommentModel.findOne({id: req.params.id});
+      if(req.user.id === comment.userId) {
+        await CommentModel.deleteOne({ id: req.params.id });
+        res.json(STATE.SUCCESS);
+      } else {
+        res.status(500).json(STATE.FAIL.NOLOGIN_ERR);
+      }
     } catch(err) {
       console.log(err)
-      res.status(500).json(STATE.FAIL);
+      res.status(500).json({...STATE.FAIL.DB_ERR, message: err.name});;
     }    
   },
 };

@@ -6,8 +6,12 @@ const jwt = require('jsonwebtoken');
 const userController = {
   getUser: async (req, res) => {
     try{
-      const user = await UserModel.findOne({id: req.params.id},['id','nickname','url'])
-      res.json(user);
+      if(req.user.id === req.params.id) {
+        const user = await UserModel.findOne({id: req.params.id},['id','nickname','url'])
+        res.json(user);
+      } else {
+        res.status(500).json(STATE.FAIL.NOLOGIN_ERR);
+      }
     } catch(err) {
       console.log(err)
       res.status(500).json(STATE.FAIL.DB_ERR);
@@ -57,10 +61,14 @@ const userController = {
 
   updateUser: async (req, res) => {
     try{
-      await UserModel.update(
-        {id: req.params.id}, 
-        req.body);
-      res.json(STATE.SUCCESS);
+      if(req.user.id === req.params.id) {
+        await UserModel.update(
+          {id: req.params.id}, 
+          req.body);
+        res.json(STATE.SUCCESS);
+      } else {
+        res.status(500).json(STATE.FAIL.NOLOGIN_ERR);
+      }
     } catch(err) {
       console.log(err)
       res.status(500).json(STATE.FAIL.DB_ERR);
@@ -82,7 +90,7 @@ const userController = {
           };
           const token = jwt.sign({
             payload,
-            exp: Math.floor(Date.now() / 1000) + (60 * 15),
+            exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24),
           }, process.env.SECRET_KEY);
           res.status(200).json({...STATE.SUCCESS, token})
         } else {

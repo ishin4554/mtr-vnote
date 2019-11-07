@@ -44,8 +44,13 @@ const courseController = {
   },
   deleteCourse: async (req, res) => {
     try{
-      await CourseModel.deleteOne({ id: req.params.id });
-      res.json(STATE.SUCCESS);
+      const course = await CourseModel.findOne({id: req.params.id});
+      if(req.user.id === course.userId) {
+        await CourseModel.deleteOne({ id: req.params.id });
+        res.json(STATE.SUCCESS);
+      } else {
+        res.status(500).json(STATE.FAIL.NOLOGIN_ERR);
+      }
     } catch(err) {
       console.log(err)
       res.status(500).json({...STATE.FAIL.DB_ERR, message: err.name});
@@ -53,10 +58,15 @@ const courseController = {
   },
   updateCourse: async (req, res) => {
     try{
-      await CourseModel.update(
-        {id: req.params.id}, 
-        req.body);
-      res.json(STATE.SUCCESS);
+      const course = await CourseModel.findOne({id: req.params.id});
+      if(req.user.id === course.userId) {
+        await CourseModel.update(
+          {id: req.params.id}, 
+          req.body);
+        res.json(STATE.SUCCESS);
+      } else {
+        res.status(500).json(STATE.FAIL.NOLOGIN_ERR);
+      }
     } catch(err) {
       console.log(err)
       res.status(500).json({...STATE.FAIL.DB_ERR, message: err.name});
