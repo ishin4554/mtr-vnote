@@ -48,7 +48,7 @@ class Sign extends Component{
       isLoadingCreateUser, 
       loadingCreateUserError,
       loadingLoginError,
-      isLogin, history, setUser} = this.props;
+      isLogin, history} = this.props;
     if(isLoadingLogin!== prevProps.isLoadingLogin && 
       !isLoadingLogin && isLogin && !loadingLoginError) {
         history.push('/courses/')

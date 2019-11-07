@@ -79,8 +79,8 @@ class CoursesList extends Component {
   }
 
   componentDidMount() {
-    const {user, history, isLogin} = this.props;
-    if(user && isLogin) {
+    const {history, isLogin} = this.props;
+    if(isLogin) {
       this.getCoursesList();
     } else {
       alert('請登入')

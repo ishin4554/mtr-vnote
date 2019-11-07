@@ -3,13 +3,15 @@ import storage from "./storage";
 
 const instance = axios.create({
   baseURL: '/api',
-  headers: {
-    authorization: storage.getCookie('token')
-  },
   proxy: {
     host: 'localhost',
     port: 5001
   }
+});
+
+instance.interceptors.request.use(config => {
+  config.headers.authorization = `${storage.getCookie('token')}`;
+  return config;
 });
 
 export const createCourse = course => instance.post("/courses", course);
