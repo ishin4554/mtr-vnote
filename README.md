@@ -1,7 +1,6 @@
 # VNote 
----
 協助管理線上影音課程筆記的最佳幫手
-[DEMO](https://vnotenow.herokuapp.com/#/)
+> [DEMO](https://vnotenow.herokuapp.com/#/)
 
 ![封面照片](https://i.imgur.com/sq8Lr9t.png)
 
