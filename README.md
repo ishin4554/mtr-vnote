@@ -36,10 +36,13 @@
 ## 功能介紹
 - 課程管理首頁，顯示自己創建的課程與共筆課程
 ![](https://i.imgur.com/92OYB7J.png)
+
 - 課程筆記頁面
 ![](https://i.imgur.com/jB5qb3A.png)
+
 - 留言管理，可以進行不同的排序、篩選與搜尋，並匯出 markdown 
 ![](https://i.imgur.com/Xog6Ejm.png)
+
 - 課程資訊管理，設定共筆對象
 ![](https://i.imgur.com/HH5yHWy.png)
 
